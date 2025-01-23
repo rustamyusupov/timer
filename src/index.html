@@ -8,11 +8,26 @@
     <script src="script.js" defer></script>
   </head>
   <body class="root">
+    <ul class="list">
+      <li>
+        <button class="item" id="edit" type="button">
+          <span class="text name">Some name of pose</span>
+          <span class="text time">01:00</span>
+        </button>
+      </li>
+    </ul>
     <form class="form hidden" method="dialog">
-      <input class="name" type="text" name="name" id="name" placeholder="Name" />
-      <input class="time" type="time" name="time" id="time" value="01:00" placeholder="Duration" />
-      <button class="save" type="submit">Save</button>
+      <input class="field name" type="text" name="name" placeholder="Name" required />
+      <input
+        class="field time"
+        type="time"
+        name="time"
+        value="01:00"
+        placeholder="Duration"
+        required
+      />
+      <button class="button save" type="submit">Save</button>
     </form>
-    <button id="add">Add</button>
+    <button class="button" id="add" type="button">Add</button>
   </body>
 </html>

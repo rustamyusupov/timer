@@ -13,14 +13,13 @@
   padding: 0;
 }
 
-button,
-input {
-  font-size: 24px;
-  height: 50px;
-  padding: 8px;
+ul {
+  list-style-type: none;
 }
 
 .root {
+  --gap: 8px;
+
   display: flex;
   flex-direction: column;
   max-width: 400px;
@@ -29,26 +28,48 @@ input {
   padding: 16px;
 }
 
+.list {
+  margin-bottom: 20px;
+}
+
+.item {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  gap: var(--gap);
+  width: 100%;
+}
+
+.text {
+  font-size: 20px;
+}
+
+.text.name {
+  margin-right: auto;
+}
+
 .form {
   align-items: flex-end;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--gap);
   justify-content: flex-end;
   width: 100%;
 }
 
+.button,
 .field {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  font-size: 24px;
+  height: 50px;
+  padding: 8px;
 }
 
-.name {
+.field.name {
   width: 100%;
 }
 
-.time {
+field.time {
   width: 130px;
 }
 
