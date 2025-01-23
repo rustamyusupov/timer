@@ -7,5 +7,12 @@
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
-  <body></body>
+  <body class="root">
+    <form class="form hidden" method="dialog">
+      <input class="name" type="text" name="name" id="name" placeholder="Name" />
+      <input class="time" type="time" name="time" id="time" value="01:00" placeholder="Duration" />
+      <button class="save" type="submit">Save</button>
+    </form>
+    <button id="add">Add</button>
+  </body>
 </html>
