@@ -7,8 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.remove('hidden');
   });
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', () => {
+    const formData = new FormData(form);
+    const saved = localStorage.getItem('timers');
+    const values = Object.fromEntries(formData.entries());
+    const timers = JSON.stringify([...(JSON.parse(saved) || []), values]);
+
     add.classList.remove('hidden');
     form.classList.add('hidden');
+    localStorage.setItem('timers', timers);
+    form.reset();
   });
 });
