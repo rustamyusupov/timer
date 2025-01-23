@@ -1,0 +1,14 @@
+{
+  "name": "interval-timer",
+  "author": "Rustam Yusupov",
+  "version": "1.0.0",
+  "license": "ISC",
+  "main": "script.js",
+  "scripts": {
+    "dev": "vite --host"
+  },
+  "description": "",
+  "dependencies": {
+    "vite": "6.0.11"
+  }
+}
