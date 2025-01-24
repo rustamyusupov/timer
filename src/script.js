@@ -2,6 +2,7 @@ const add = document.getElementById('add');
 const form = document.getElementById('form');
 const list = document.getElementById('list');
 const name = document.getElementById('name');
+const pause = document.getElementById('pause');
 const reset = document.getElementById('reset');
 const start = document.getElementById('start');
 
@@ -21,10 +22,9 @@ const state = {
 const setState = newState => {
   Object.assign(state, newState);
   localStorage.setItem('timers', JSON.stringify(state.timers));
+  console.log(state);
   render(state);
 };
-
-const handleAddClick = () => setState({ process: process.add });
 
 const handleSubmit = event => {
   const data = new FormData(event.target);
@@ -46,6 +46,8 @@ const handleListClick = event => {
 
   setState({ timers, process: timers.length > 0 ? process.ready : process.idle });
 };
+
+const handleClick = process => () => setState({ process });
 
 const renderItem = list => (timer, index) => {
   const remove = document.createElement('button');
@@ -91,12 +93,16 @@ const renderList = (list, timers) => {
 const render = state => {
   switch (state.process) {
     case process.idle:
+      add.classList.remove('hidden');
+      form.classList.add('hidden');
+      pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
       break;
     case process.add:
       add.classList.add('hidden');
       form.classList.remove('hidden');
+      pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
       name.focus();
@@ -104,13 +110,24 @@ const render = state => {
     case process.ready:
       add.classList.remove('hidden');
       form.classList.add('hidden');
-      reset.classList.remove('hidden');
+      pause.classList.add('hidden');
+      reset.classList.add('hidden');
       start.classList.remove('hidden');
       form.reset();
       break;
     case process.countdown:
+      add.classList.add('hidden');
+      form.classList.add('hidden');
+      reset.classList.remove('hidden');
+      pause.classList.remove('hidden');
+      start.classList.add('hidden');
       break;
     case process.pause:
+      add.classList.add('hidden');
+      form.classList.add('hidden');
+      pause.classList.add('hidden');
+      reset.classList.remove('hidden');
+      start.classList.remove('hidden');
       break;
     default:
       break;
@@ -122,9 +139,12 @@ const render = state => {
 document.addEventListener('DOMContentLoaded', () => {
   const timers = JSON.parse(localStorage.getItem('timers')) || [];
 
-  add.addEventListener('click', handleAddClick);
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
+  add.addEventListener('click', handleClick(process.add));
+  pause.addEventListener('click', handleClick(process.pause));
+  reset.addEventListener('click', handleClick(process.ready));
+  start.addEventListener('click', handleClick(process.countdown));
 
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
 });
