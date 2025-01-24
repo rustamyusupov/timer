@@ -1,53 +1,4 @@
-const add = document.getElementById('add');
-const form = document.getElementById('form');
-const list = document.getElementById('list');
-const name = document.getElementById('name');
-const pause = document.getElementById('pause');
-const reset = document.getElementById('reset');
-const start = document.getElementById('start');
-
-const process = {
-  idle: 'idle',
-  add: 'add',
-  ready: 'ready',
-  countdown: 'countdown',
-  pause: 'pause',
-};
-
-const state = {
-  process: process.idle,
-  timers: [],
-};
-
-const setState = newState => {
-  Object.assign(state, newState);
-  localStorage.setItem('timers', JSON.stringify(state.timers));
-  console.log(state);
-  render(state);
-};
-
-const handleSubmit = event => {
-  const data = new FormData(event.target);
-  const values = Object.fromEntries(data.entries());
-  const timers = [...state.timers, values];
-
-  setState({ form: form.hide, process: process.ready, timers });
-};
-
-const handleListClick = event => {
-  if (!event.target.classList.contains('remove')) {
-    return;
-  }
-
-  const index = event.target.dataset.index;
-  const timers = [...state.timers];
-
-  timers.splice(index, 1);
-
-  setState({ timers, process: timers.length > 0 ? process.ready : process.idle });
-};
-
-const handleClick = process => () => setState({ process });
+import { process } from './constants.js';
 
 const renderItem = list => (timer, index) => {
   const remove = document.createElement('button');
@@ -90,7 +41,9 @@ const renderList = (list, timers) => {
   timers.forEach(renderItem(list));
 };
 
-const render = state => {
+export const render = (elements, state) => {
+  const { add, form, list, name, pause, reset, start } = elements;
+
   switch (state.process) {
     case process.idle:
       add.classList.remove('hidden');
@@ -135,16 +88,3 @@ const render = state => {
 
   renderList(list, state.timers);
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  const timers = JSON.parse(localStorage.getItem('timers')) || [];
-
-  form.addEventListener('submit', handleSubmit);
-  list.addEventListener('click', handleListClick);
-  add.addEventListener('click', handleClick(process.add));
-  pause.addEventListener('click', handleClick(process.pause));
-  reset.addEventListener('click', handleClick(process.ready));
-  start.addEventListener('click', handleClick(process.countdown));
-
-  setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
-});
