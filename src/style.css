@@ -35,7 +35,6 @@ ul {
 .item {
   background-color: transparent;
   border: none;
-  cursor: pointer;
   display: flex;
   gap: var(--gap);
   width: 100%;

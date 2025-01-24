@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('timers', JSON.stringify(timers));
     add.classList.remove('hidden');
     form.classList.add('hidden');
-    render(timers);
     form.reset();
+    render(timers);
   });
 
   render(timers);
