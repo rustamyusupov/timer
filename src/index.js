@@ -17,11 +17,15 @@ const setState = newState => {
   const prev = { ...state };
   Object.assign(state, newState);
 
-  if (state.process === process.countdown) {
+  if (state.process === process.countdown || state.timers.length > 0) {
     renderTimer(elements, state);
   }
 
-  if (newState.process && newState.process !== prev.process) {
+  if (
+    state.process === process.idle ||
+    (newState.timers && newState.timers.length !== prev.timers.length) ||
+    (newState.process && newState.process !== prev.process)
+  ) {
     renderElements(elements, state);
     renderList(elements, state);
   }

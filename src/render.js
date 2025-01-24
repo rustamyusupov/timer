@@ -1,11 +1,7 @@
 import { process } from './constants.js';
 
 export const renderTimer = (elements, state) => {
-  if (!state.current.time) {
-    return;
-  }
-
-  elements.timer.textContent = state.current.time;
+  elements.timer.textContent = state.current.time ? state.current.time : '00:00';
 };
 
 const renderItem = list => (timer, index) => {
@@ -60,7 +56,7 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
-      timer.classList.add('hidden');
+      // timer.classList.add('hidden');
       break;
     case process.add:
       add.classList.add('hidden');
@@ -68,7 +64,7 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
-      timer.classList.add('hidden');
+      // timer.classList.add('hidden');
       name.focus();
       break;
     case process.ready:
@@ -77,7 +73,7 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.remove('hidden');
-      timer.classList.add('hidden');
+      // timer.classList.add('hidden');
       form.reset();
       break;
     case process.countdown:
@@ -86,7 +82,7 @@ export const renderElements = (elements, state) => {
       reset.classList.remove('hidden');
       pause.classList.remove('hidden');
       start.classList.add('hidden');
-      timer.classList.remove('hidden');
+      // timer.classList.remove('hidden');
       break;
     case process.pause:
       add.classList.add('hidden');
@@ -94,9 +90,11 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.remove('hidden');
       start.classList.remove('hidden');
-      timer.classList.remove('hidden');
+      // timer.classList.remove('hidden');
       break;
     default:
       break;
   }
+
+  timer.classList.toggle('hidden', state.timers.length === 0);
 };
