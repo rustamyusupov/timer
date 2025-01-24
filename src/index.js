@@ -23,14 +23,13 @@ const setState = newState => {
 
   if (
     state.process === process.idle ||
-    (newState.timers && newState.timers.length !== prev.timers.length) ||
-    (newState.process && newState.process !== prev.process)
+    (newState.process && newState.process !== prev.process) ||
+    (newState.timers && newState.timers.length !== prev.timers.length)
   ) {
     renderElements(elements, state);
     renderList(elements, state);
+    localStorage.setItem('timers', JSON.stringify(state.timers));
   }
-
-  localStorage.setItem('timers', JSON.stringify(state.timers));
 };
 
 const handleSubmit = event => {
