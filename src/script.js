@@ -9,18 +9,20 @@ const render = timers => {
     li.classList.add('text');
     li.textContent = 'No timers';
     list.appendChild(li);
+
     return;
   }
 
-  timers.forEach(timer => {
+  timers.forEach((timer, index) => {
     const li = document.createElement('li');
-    const button = document.createElement('button');
+    const remove = document.createElement('button');
     const name = document.createElement('span');
     const time = document.createElement('span');
 
-    button.classList.add('item');
-    button.setAttribute('type', 'button');
-    button.setAttribute('id', 'edit');
+    remove.classList.add('remove');
+    remove.setAttribute('type', 'button');
+    remove.textContent = '✖';
+    remove.dataset.index = index;
 
     name.classList.add('text', 'name');
     name.textContent = timer.name;
@@ -28,9 +30,10 @@ const render = timers => {
     time.classList.add('text', 'time');
     time.textContent = timer.time;
 
-    button.appendChild(name);
-    button.appendChild(time);
-    li.appendChild(button);
+    li.classList.add('item');
+    li.appendChild(remove);
+    li.appendChild(name);
+    li.appendChild(time);
     list.appendChild(li);
   });
 };
@@ -38,6 +41,7 @@ const render = timers => {
 document.addEventListener('DOMContentLoaded', () => {
   const add = document.getElementById('add');
   const form = document.getElementById('form');
+  const list = document.getElementById('list');
   const saved = localStorage.getItem('timers');
   const timers = JSON.parse(saved) || [];
 
@@ -46,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     add.classList.add('hidden');
     form.classList.remove('hidden');
+
     name.focus();
   });
 
@@ -56,9 +61,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const timers = [...(JSON.parse(saved) || []), values];
 
     localStorage.setItem('timers', JSON.stringify(timers));
+
     add.classList.remove('hidden');
     form.classList.add('hidden');
+
     form.reset();
+
+    render(timers);
+  });
+
+  list.addEventListener('click', event => {
+    if (!event.target.classList.contains('remove')) {
+      return;
+    }
+
+    const index = event.target.dataset.index;
+    const saved = localStorage.getItem('timers');
+    const timers = JSON.parse(saved) || [];
+
+    timers.splice(index, 1);
+    localStorage.setItem('timers', JSON.stringify(timers));
+
     render(timers);
   });
 
