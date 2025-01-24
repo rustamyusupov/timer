@@ -1,7 +1,5 @@
-const renderList = () => {
-  const list = document.querySelector('ul');
-  const saved = localStorage.getItem('timers');
-  const timers = JSON.parse(saved) || [];
+const render = timers => {
+  const list = document.querySelector('#list');
 
   list.innerHTML = '';
 
@@ -39,30 +37,27 @@ const renderList = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const add = document.querySelector('#add');
-  const edit = document.querySelector('#edit');
-  const form = document.querySelector('form');
+  const form = document.querySelector('#form');
+  const saved = localStorage.getItem('timers');
+  const timers = JSON.parse(saved) || [];
 
   add.addEventListener('click', () => {
     add.classList.add('hidden');
     form.classList.remove('hidden');
   });
 
-  edit.addEventListener('dblclick', e => {
-    console.log(e);
-  });
-
   form.addEventListener('submit', () => {
     const formData = new FormData(form);
     const saved = localStorage.getItem('timers');
     const values = Object.fromEntries(formData.entries());
-    const timers = JSON.stringify([...(JSON.parse(saved) || []), values]);
+    const timers = [...(JSON.parse(saved) || []), values];
 
+    localStorage.setItem('timers', JSON.stringify(timers));
     add.classList.remove('hidden');
     form.classList.add('hidden');
-    localStorage.setItem('timers', timers);
+    render(timers);
     form.reset();
-    renderList();
   });
 
-  renderList();
+  render(timers);
 });
