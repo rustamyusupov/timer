@@ -1,5 +1,5 @@
 const render = timers => {
-  const list = document.querySelector('#list');
+  const list = document.getElementById('list');
 
   list.innerHTML = '';
 
@@ -36,14 +36,17 @@ const render = timers => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const add = document.querySelector('#add');
-  const form = document.querySelector('#form');
+  const add = document.getElementById('add');
+  const form = document.getElementById('form');
   const saved = localStorage.getItem('timers');
   const timers = JSON.parse(saved) || [];
 
   add.addEventListener('click', () => {
+    const name = document.getElementById('name');
+
     add.classList.add('hidden');
     form.classList.remove('hidden');
+    name.focus();
   });
 
   form.addEventListener('submit', () => {
