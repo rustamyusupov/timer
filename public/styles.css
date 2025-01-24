@@ -28,6 +28,13 @@ ul {
   padding: 16px;
 }
 
+.timer {
+  display: flex;
+  font-size: 50px;
+  font-weight: bold;
+  justify-content: center;
+}
+
 .list {
   margin-bottom: 20px;
 }

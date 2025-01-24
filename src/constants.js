@@ -7,13 +7,10 @@ export const process = {
 };
 
 export const state = {
+  current: {
+    index: 0,
+    time: '00:00',
+  },
   process: process.idle,
   timers: [],
-};
-
-export const processByElement = {
-  add: process.add,
-  pause: process.pause,
-  reset: process.ready,
-  start: process.countdown,
 };

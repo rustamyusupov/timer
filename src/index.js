@@ -1,4 +1,4 @@
-import { process, processByElement, state } from './constants';
+import { process, state } from './constants';
 import { render } from './render';
 
 const elements = {
@@ -9,6 +9,7 @@ const elements = {
   pause: document.getElementById('pause'),
   reset: document.getElementById('reset'),
   start: document.getElementById('start'),
+  timer: document.getElementById('timer'),
 };
 
 const setState = newState => {
@@ -39,17 +40,30 @@ const handleListClick = event => {
   setState({ timers, process: timers.length > 0 ? process.ready : process.idle });
 };
 
-const handleClick = process => () => setState({ process });
+const handleAddClick = () => setState({ process: process.add });
+
+const handlePauseClick = () => {
+  setState({ process: process.pause });
+};
+
+const handleResetClick = () => {
+  setState({ process: process.idle });
+};
+
+const handleStartClick = () => {
+  setState({ process: process.countdown });
+};
 
 document.addEventListener('DOMContentLoaded', () => {
-  const { form, list, ...controls } = elements;
+  const { form, list, add, name, pause, reset, start } = elements;
   const timers = JSON.parse(localStorage.getItem('timers')) || [];
 
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
-  Object.entries(controls).forEach(([id, c]) =>
-    c.addEventListener('click', handleClick(processByElement?.[id]))
-  );
+  add.addEventListener('click', handleAddClick);
+  pause.addEventListener('click', handlePauseClick);
+  reset.addEventListener('click', handleResetClick);
+  start.addEventListener('click', handleStartClick);
 
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
 });

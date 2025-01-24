@@ -1,5 +1,9 @@
 import { process } from './constants.js';
 
+const renderTimer = (timer, time) => {
+  timer.textContent = time;
+};
+
 const renderItem = list => (timer, index) => {
   const remove = document.createElement('button');
   const name = document.createElement('span');
@@ -42,7 +46,7 @@ const renderList = (list, timers) => {
 };
 
 export const render = (elements, state) => {
-  const { add, form, list, name, pause, reset, start } = elements;
+  const { add, form, list, name, pause, reset, start, timer } = elements;
 
   switch (state.process) {
     case process.idle:
@@ -51,6 +55,7 @@ export const render = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
+      timer.classList.add('hidden');
       break;
     case process.add:
       add.classList.add('hidden');
@@ -58,6 +63,7 @@ export const render = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
+      timer.classList.add('hidden');
       name.focus();
       break;
     case process.ready:
@@ -66,6 +72,7 @@ export const render = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.remove('hidden');
+      timer.classList.add('hidden');
       form.reset();
       break;
     case process.countdown:
@@ -74,6 +81,7 @@ export const render = (elements, state) => {
       reset.classList.remove('hidden');
       pause.classList.remove('hidden');
       start.classList.add('hidden');
+      timer.classList.remove('hidden');
       break;
     case process.pause:
       add.classList.add('hidden');
@@ -81,10 +89,12 @@ export const render = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.remove('hidden');
       start.classList.remove('hidden');
+      timer.classList.remove('hidden');
       break;
     default:
       break;
   }
 
+  renderTimer(timer, state.current.time);
   renderList(list, state.timers);
 };
