@@ -71,51 +71,26 @@ const handleResetClick = () => {
 };
 
 const updateTimer = () => {
-  const { current, timers, intervalId } = state;
-  const seconds = convertTimeToSeconds(current.time);
+  const seconds = convertTimeToSeconds(state.current.time) - 1;
+  const time = convertSecondsToTime(seconds);
 
-  if (!current?.index !== null && !current?.time) {
-    clearInterval(intervalId);
-    setState({
-      intervalId: null,
-      current: { index: null, time: null },
-      process: process.ready,
-    });
-    return;
-  }
+  setState({ current: { index: state.current.index, time } });
 
-  if (seconds === 0) {
-    const nextIndex = current.index + 1;
-
-    if (nextIndex >= timers.length) {
-      clearInterval(intervalId);
-      setState({
-        intervalId: null,
-        current: { index: null, time: null },
-        process: process.ready,
-      });
-      return;
-    }
-
+  if (seconds === 0 && state.timers.length - 1 === state.current.index) {
+    clearInterval(state.intervalId);
+    setState({ current: { index: null, time: null }, process: process.ready });
+  } else if (seconds === 0) {
     setState({
       current: {
-        index: nextIndex,
-        time: timers[nextIndex].time,
+        index: state.current.index + 1,
+        time: state.timers[state.current.index + 1].time,
       },
     });
-    return;
   }
-
-  setState({
-    current: {
-      index: current.index,
-      time: convertSecondsToTime(seconds - 1),
-    },
-  });
 };
 
 const handleStartClick = () => {
-  const initial = process.idle ? { index: 0, time: state.timers[0].time } : state.current;
+  const initial = state.current.time ? state.current : { index: 0, time: state.timers[0].time };
 
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
 
