@@ -20,10 +20,9 @@ const setState = newState => {
   console.log({ prevState, newState });
 
   if (
-    state.process === process.countdown ||
+    state.current.time !== prevState.current.time ||
     (state.process === process.ready && prevState.process === process.idle)
   ) {
-    console.log('timer');
     renderTimer(elements, state);
   }
 
@@ -73,6 +72,7 @@ const handleResetClick = () => {
 
 const updateTimer = () => {
   const { current, timers, intervalId } = state;
+  const seconds = convertTimeToSeconds(current.time);
 
   if (!current?.index !== null && !current?.time) {
     clearInterval(intervalId);
@@ -83,8 +83,6 @@ const updateTimer = () => {
     });
     return;
   }
-
-  const seconds = convertTimeToSeconds(current.time);
 
   if (seconds === 0) {
     const nextIndex = current.index + 1;
