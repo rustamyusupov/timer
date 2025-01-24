@@ -11,7 +11,7 @@ export const state = {
   timers: [],
 };
 
-export const processById = {
+export const processByElement = {
   add: process.add,
   pause: process.pause,
   reset: process.ready,

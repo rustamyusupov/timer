@@ -1,4 +1,4 @@
-import { process, processById, state } from './constants';
+import { process, processByElement, state } from './constants';
 import { render } from './render';
 
 const elements = {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
   Object.entries(controls).forEach(([id, c]) =>
-    c.addEventListener('click', handleClick(processById?.[id]))
+    c.addEventListener('click', handleClick(processByElement?.[id]))
   );
 
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
