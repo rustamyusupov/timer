@@ -1,5 +1,6 @@
 import { process, state } from './constants';
 import { render } from './render';
+import { convertSecondsToTime, convertTimeToSeconds } from './utils';
 
 const elements = {
   add: document.getElementById('add'),
@@ -43,15 +44,39 @@ const handleListClick = event => {
 const handleAddClick = () => setState({ process: process.add });
 
 const handlePauseClick = () => {
-  setState({ process: process.pause });
+  clearInterval(state.intervalId);
+  setState({ intervalId: null, process: process.pause });
 };
 
 const handleResetClick = () => {
-  setState({ process: process.idle });
+  clearInterval(state.intervalId);
+  setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
 };
 
 const handleStartClick = () => {
-  setState({ process: process.countdown });
+  state.intervalId = setInterval(() => {
+    const seconds = convertTimeToSeconds(state.current.time) - 1;
+    const time = convertSecondsToTime(seconds);
+
+    setState({ current: { index: state.current.index, time } });
+
+    if (seconds === 0 && state.timers.length - 1 === state.current.index) {
+      clearInterval(state.intervalId);
+      setState({ current: { index: null, time: null }, process: process.ready });
+    } else if (seconds === 0) {
+      setState({
+        current: {
+          index: state.current.index + 1,
+          time: state.timers[state.current.index + 1].time,
+        },
+      });
+    }
+  }, 1000);
+
+  setState({
+    current: state.current.time ? state.current : { index: 0, time: state.timers[0].time },
+    process: process.countdown,
+  });
 };
 
 document.addEventListener('DOMContentLoaded', () => {

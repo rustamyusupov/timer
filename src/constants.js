@@ -1,3 +1,5 @@
+export const secondsInMinute = 60;
+
 export const process = {
   idle: 'idle',
   add: 'add',
@@ -7,9 +9,10 @@ export const process = {
 };
 
 export const state = {
+  intervalId: null,
   current: {
-    index: 0,
-    time: '00:00',
+    index: null,
+    time: null,
   },
   process: process.idle,
   timers: [],

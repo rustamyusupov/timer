@@ -1,7 +1,11 @@
 import { process } from './constants.js';
 
-const renderTimer = (timer, time) => {
-  timer.textContent = time;
+const renderTimer = (timer, current) => {
+  if (!current) {
+    return;
+  }
+
+  timer.textContent = current;
 };
 
 const renderItem = list => (timer, index) => {
