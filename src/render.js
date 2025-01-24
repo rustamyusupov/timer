@@ -1,11 +1,11 @@
 import { process } from './constants.js';
 
-const renderTimer = (timer, current) => {
-  if (!current) {
+export const renderTimer = (elements, state) => {
+  if (!state.current.time) {
     return;
   }
 
-  timer.textContent = current;
+  elements.timer.textContent = state.current.time;
 };
 
 const renderItem = list => (timer, index) => {
@@ -33,10 +33,11 @@ const renderItem = list => (timer, index) => {
   list.appendChild(item);
 };
 
-const renderList = (list, timers) => {
+export const renderList = (elements, state) => {
+  const { list } = elements;
   list.innerHTML = '';
 
-  if (timers.length === 0) {
+  if (state.timers.length === 0) {
     const li = document.createElement('li');
 
     li.classList.add('text');
@@ -46,11 +47,11 @@ const renderList = (list, timers) => {
     return;
   }
 
-  timers.forEach(renderItem(list));
+  state.timers.forEach(renderItem(list));
 };
 
-export const render = (elements, state) => {
-  const { add, form, list, name, pause, reset, start, timer } = elements;
+export const renderElements = (elements, state) => {
+  const { add, form, name, pause, reset, start, timer } = elements;
 
   switch (state.process) {
     case process.idle:
@@ -98,7 +99,4 @@ export const render = (elements, state) => {
     default:
       break;
   }
-
-  renderTimer(timer, state.current.time);
-  renderList(list, state.timers);
 };

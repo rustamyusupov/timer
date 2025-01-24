@@ -1,5 +1,5 @@
 import { millisecondsInSecond, process, state } from './constants';
-import { render } from './render';
+import { renderElements, renderList, renderTimer } from './render';
 import { convertSecondsToTime, convertTimeToSeconds } from './utils';
 
 const elements = {
@@ -14,10 +14,19 @@ const elements = {
 };
 
 const setState = newState => {
+  const prev = { ...state };
   Object.assign(state, newState);
+
+  if (state.process === process.countdown) {
+    renderTimer(elements, state);
+  }
+
+  if (newState.process && newState.process !== prev.process) {
+    renderElements(elements, state);
+    renderList(elements, state);
+  }
+
   localStorage.setItem('timers', JSON.stringify(state.timers));
-  console.log(state);
-  render(elements, state);
 };
 
 const handleSubmit = event => {
