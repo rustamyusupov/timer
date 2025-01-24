@@ -42,7 +42,7 @@ const handleSubmit = event => {
 };
 
 const handleListClick = event => {
-  if (!event.target.classList.contains('remove')) {
+  if (!event.target.classList.contains('remove') || state.process === process.countdown) {
     return;
   }
 
@@ -66,28 +66,41 @@ const handleResetClick = () => {
   setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
 };
 
-const handleStartClick = () => {
-  state.intervalId = setInterval(() => {
-    const seconds = convertTimeToSeconds(state.current.time) - 1;
-    const time = convertSecondsToTime(seconds);
+const updateTimer = () => {
+  const seconds = convertTimeToSeconds(state.current.time) - 1;
 
-    setState({ current: { index: state.current.index, time } });
+  if (seconds !== 0) {
+    return setState({
+      current: {
+        index: state.current.index,
+        time: convertSecondsToTime(seconds),
+      },
+    });
+  }
 
-    if (seconds === 0 && state.timers.length - 1 === state.current.index) {
-      clearInterval(state.intervalId);
-      setState({ current: { index: null, time: null }, process: process.ready });
-    } else if (seconds === 0) {
-      setState({
-        current: {
-          index: state.current.index + 1,
-          time: state.timers[state.current.index + 1].time,
-        },
-      });
-    }
-  }, millisecondsInSecond);
+  if (state.timers.length - 1 === state.current.index) {
+    clearInterval(state.intervalId);
+    return setState({
+      current: { index: null, time: null },
+      process: process.ready,
+    });
+  }
 
   setState({
-    current: state.current.time ? state.current : { index: 0, time: state.timers[0].time },
+    current: {
+      index: state.current.index + 1,
+      time: state.timers[state.current.index + 1].time,
+    },
+  });
+};
+
+const handleStartClick = () => {
+  const initial = state.current.time ? state.current : { index: 0, time: state.timers[0].time };
+
+  state.intervalId = setInterval(updateTimer, millisecondsInSecond);
+
+  setState({
+    current: initial,
     process: process.countdown,
   });
 };
