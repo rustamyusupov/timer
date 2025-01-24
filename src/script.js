@@ -1,9 +1,60 @@
-const renderTimer = (timer, index) => {
+const add = document.getElementById('add');
+const form = document.getElementById('form');
+const list = document.getElementById('list');
+const name = document.getElementById('name');
+
+const formState = {
+  hide: 'hide',
+  show: 'show',
+};
+
+const process = {
+  idle: 'idle',
+  ready: 'ready',
+  countdown: 'countdown',
+  pause: 'pause',
+};
+
+const state = {
+  form: formState.hide,
+  process: process.idle,
+  timers: [],
+};
+
+const setState = newState => {
+  Object.assign(state, newState);
+  localStorage.setItem('timers', JSON.stringify(state.timers));
+  render(state);
+};
+
+const handleAddClick = () => setState({ form: formState.show });
+
+const handleSubmit = event => {
+  const data = new FormData(event.target);
+  const values = Object.fromEntries(data.entries());
+  const timers = [...state.timers, values];
+
+  setState({ form: formState.hide, process: process.ready, timers });
+};
+
+const handleListClick = event => {
+  if (!event.target.classList.contains('remove')) {
+    return;
+  }
+
+  const index = event.target.dataset.index;
+  const timers = [...state.timers];
+
+  timers.splice(index, 1);
+
+  setState({ timers, process: timers.length > 0 ? process.ready : process.idle });
+};
+
+const renderItem = list => (timer, index) => {
   const remove = document.createElement('button');
   const name = document.createElement('span');
   const time = document.createElement('span');
   const item = document.createElement('li');
-  const list = document.getElementById('list');
 
   remove.classList.add('remove');
   remove.setAttribute('type', 'button');
@@ -24,9 +75,7 @@ const renderTimer = (timer, index) => {
   list.appendChild(item);
 };
 
-const render = timers => {
-  const list = document.getElementById('list');
-
+const renderList = (list, timers) => {
   list.innerHTML = '';
 
   if (timers.length === 0) {
@@ -39,61 +88,47 @@ const render = timers => {
     return;
   }
 
-  timers.forEach(renderTimer);
+  timers.forEach(renderItem(list));
 };
 
-const handleAdd = event => {
-  const form = document.getElementById('form');
-  const name = document.getElementById('name');
-
-  event.target.classList.add('hidden');
-  form.classList.remove('hidden');
-
-  name.focus();
-};
-
-const handleSubmit = event => {
-  const data = new FormData(event.target);
-  const add = document.getElementById('add');
-  const saved = localStorage.getItem('timers');
-  const values = Object.fromEntries(data.entries());
-  const timers = [...(JSON.parse(saved) || []), values];
-
-  localStorage.setItem('timers', JSON.stringify(timers));
-
-  event.target.classList.add('hidden');
-  add.classList.remove('hidden');
-
-  event.target.reset();
-
-  render(timers);
-};
-
-const handleListClick = event => {
-  if (!event.target.classList.contains('remove')) {
-    return;
+const render = state => {
+  switch (state.form) {
+    case formState.hide:
+      add.classList.remove('hidden');
+      form.classList.add('hidden');
+      form.reset();
+      break;
+    case formState.show:
+      add.classList.add('hidden');
+      form.classList.remove('hidden');
+      name.focus();
+      break;
+    default:
+      break;
   }
 
-  const index = event.target.dataset.index;
-  const saved = localStorage.getItem('timers');
-  const timers = JSON.parse(saved) || [];
+  switch (state.process) {
+    case process.idle:
+      break;
+    case process.ready:
+      break;
+    case process.countdown:
+      break;
+    case process.pause:
+      break;
+    default:
+      break;
+  }
 
-  timers.splice(index, 1);
-  localStorage.setItem('timers', JSON.stringify(timers));
-
-  render(timers);
+  renderList(list, state.timers);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const add = document.getElementById('add');
-  const form = document.getElementById('form');
-  const list = document.getElementById('list');
-  const saved = localStorage.getItem('timers');
-  const timers = JSON.parse(saved) || [];
+  const timers = JSON.parse(localStorage.getItem('timers')) || [];
 
-  add.addEventListener('click', handleAdd);
+  add.addEventListener('click', handleAddClick);
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
 
-  render(timers);
+  setState({ process: timers > 0 ? process.ready : process.idle, timers });
 });
