@@ -66,6 +66,10 @@ ul {
   width: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
 .button,
 .field {
   font-size: 24px;
@@ -81,10 +85,16 @@ field.time {
   width: 130px;
 }
 
-.save {
-  flex: 1;
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
 }
 
-.hidden {
-  display: none;
+.button {
+  width: 100%;
+}
+
+.save {
+  flex: 1;
 }
