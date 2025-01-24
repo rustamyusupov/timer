@@ -1,4 +1,4 @@
-import { process, state } from './constants';
+import { millisecondsInSecond, process, state } from './constants';
 import { render } from './render';
 import { convertSecondsToTime, convertTimeToSeconds } from './utils';
 
@@ -71,7 +71,7 @@ const handleStartClick = () => {
         },
       });
     }
-  }, 1000);
+  }, millisecondsInSecond);
 
   setState({
     current: state.current.time ? state.current : { index: 0, time: state.timers[0].time },

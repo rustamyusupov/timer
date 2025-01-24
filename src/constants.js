@@ -1,3 +1,4 @@
+export const millisecondsInSecond = 1000;
 export const secondsInMinute = 60;
 
 export const process = {
