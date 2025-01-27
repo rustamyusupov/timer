@@ -15,26 +15,29 @@ const elements = {
 
 const setState = newState => {
   const prevState = { ...state };
+  const isTimerReady = prevState.process === process.idle && newState.process === process.ready;
+  const isTimeChanged = newState.current && newState.current.time !== prevState.current.time;
+  const isIdle = prevState.process === process.idle;
+  const isTimerAdded = newState.timers && newState.timers.length !== prevState.timers.length;
+  const isProcessChanged = prevState.process !== newState.process;
+
   Object.assign(state, newState);
 
-  console.log({ prevState, newState });
-
-  if (
-    state.current.time !== prevState.current.time ||
-    (state.process === process.ready && prevState.process === process.idle)
-  ) {
+  if (isTimerReady || isTimeChanged) {
     renderTimer(elements, state);
   }
 
-  if (
-    state.process === process.idle ||
-    (state.process && state.process !== prevState.process) ||
-    (state.timers && state.timers.length !== prevState.timers.length)
-  ) {
+  if (isIdle || isTimerAdded || isProcessChanged) {
     renderElements(elements, state);
     renderList(elements, state);
-    localStorage.setItem('timers', JSON.stringify(state.timers));
   }
+
+  localStorage.setItem('timers', JSON.stringify(state.timers));
+};
+
+const resetTimer = () => {
+  clearInterval(state.intervalId);
+  setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
 };
 
 const handleSubmit = event => {
@@ -46,16 +49,19 @@ const handleSubmit = event => {
 };
 
 const handleListClick = event => {
-  if (!event.target.classList.contains('remove') || state.process === process.countdown) {
+  const isNotRemove = !event.target.classList.contains('remove');
+  const isCountdown = state.process === process.countdown;
+
+  if (isNotRemove || isCountdown) {
     return;
   }
 
-  const index = event.target.dataset.index;
   const timers = [...state.timers];
+  const index = event.target.dataset.index;
 
   timers.splice(index, 1);
 
-  setState({ timers, process: timers.length > 0 ? process.ready : process.idle });
+  setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
 };
 
 const handleAddClick = () => setState({ process: process.add });
@@ -65,28 +71,30 @@ const handlePauseClick = () => {
   setState({ intervalId: null, process: process.pause });
 };
 
-const handleResetClick = () => {
-  clearInterval(state.intervalId);
-  setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
-};
+const handleResetClick = () => resetTimer();
 
 const updateTimer = () => {
+  const index = state.current.index;
+  const nextIndex = index + 1;
+  const isLastTimer = state.timers.length - 1 === index;
   const seconds = convertTimeToSeconds(state.current.time) - 1;
   const time = convertSecondsToTime(seconds);
 
-  setState({ current: { index: state.current.index, time } });
+  // update time
+  setState({ current: { index, time } });
 
-  if (seconds === 0 && state.timers.length - 1 === state.current.index) {
-    clearInterval(state.intervalId);
-    setState({ current: { index: null, time: null }, process: process.ready });
-  } else if (seconds === 0) {
-    setState({
-      current: {
-        index: state.current.index + 1,
-        time: state.timers[state.current.index + 1].time,
-      },
-    });
+  if (seconds !== 0) {
+    return;
   }
+
+  if (isLastTimer) {
+    resetTimer();
+    return;
+  }
+
+  setState({
+    current: { index: nextIndex, time: state.timers[nextIndex].time },
+  });
 };
 
 const handleStartClick = () => {
@@ -94,14 +102,11 @@ const handleStartClick = () => {
 
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
 
-  setState({
-    current: initial,
-    process: process.countdown,
-  });
+  setState({ current: initial, process: process.countdown });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const { form, list, add, name, pause, reset, start } = elements;
+const init = () => {
+  const { form, list, add, pause, reset, start } = elements;
   const timers = JSON.parse(localStorage.getItem('timers')) || [];
 
   form.addEventListener('submit', handleSubmit);
@@ -112,4 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
   start.addEventListener('click', handleStartClick);
 
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
-});
+};
+
+document.addEventListener('DOMContentLoaded', init);
