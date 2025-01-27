@@ -1,5 +1,5 @@
 export default {
-  base: 'interval-timer',
+  base: '/interval-timer',
   server: {
     port: 3000,
   },
