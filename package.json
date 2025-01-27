@@ -6,10 +6,14 @@
   "main": "script.js",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "vite build && gh-pages -d dist"
   },
   "description": "",
   "dependencies": {
     "vite": "6.0.11"
+  },
+  "devDependencies": {
+    "gh-pages": "6.3.0"
   }
 }
