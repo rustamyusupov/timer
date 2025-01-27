@@ -33,16 +33,6 @@ export const renderList = (elements, state) => {
   const { list } = elements;
   list.innerHTML = '';
 
-  if (state.timers.length === 0) {
-    const li = document.createElement('li');
-
-    li.classList.add('text');
-    li.textContent = 'No timers';
-    list.appendChild(li);
-
-    return;
-  }
-
   state.timers.forEach(renderItem(list));
 };
 
@@ -56,7 +46,6 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
-      // timer.classList.add('hidden');
       break;
     case process.add:
       add.classList.add('hidden');
@@ -64,7 +53,6 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.add('hidden');
-      // timer.classList.add('hidden');
       name.focus();
       break;
     case process.ready:
@@ -73,7 +61,6 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.add('hidden');
       start.classList.remove('hidden');
-      // timer.classList.add('hidden');
       form.reset();
       break;
     case process.countdown:
@@ -82,7 +69,6 @@ export const renderElements = (elements, state) => {
       reset.classList.remove('hidden');
       pause.classList.remove('hidden');
       start.classList.add('hidden');
-      // timer.classList.remove('hidden');
       break;
     case process.pause:
       add.classList.add('hidden');
@@ -90,11 +76,10 @@ export const renderElements = (elements, state) => {
       pause.classList.add('hidden');
       reset.classList.remove('hidden');
       start.classList.remove('hidden');
-      // timer.classList.remove('hidden');
       break;
     default:
       break;
   }
 
-  timer.classList.toggle('hidden', state.timers.length === 0);
+  // timer.classList.toggle('hidden', state.timers.length === 0);
 };

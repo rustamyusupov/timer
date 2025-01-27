@@ -15,7 +15,7 @@ const elements = {
 
 const setState = newState => {
   const prevState = { ...state };
-  const isTimerReady = prevState.process === process.idle && newState.process === process.ready;
+  const isTimerReady = prevState.process === process.idle || newState.process === process.ready;
   const isTimeChanged = newState.current && newState.current.time !== prevState.current.time;
   const isIdle = prevState.process === process.idle;
   const isTimerAdded = newState.timers && newState.timers.length !== prevState.timers.length;
