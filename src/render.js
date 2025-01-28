@@ -84,7 +84,7 @@ const updateVisibility = (elements, state) => {
 };
 
 export const render = (elements, state) => {
+  renderList(elements, state);
   renderTimer(elements, state);
   updateVisibility(elements, state);
-  renderList(elements, state);
 };
