@@ -30,3 +30,19 @@ export const request = async url => {
     return [];
   }
 };
+
+export const beep = (duration = 500, frequency = 1000, volume = 2, type = 'triangle') => {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  gainNode.gain.value = volume;
+  oscillator.frequency.value = frequency;
+  oscillator.type = type;
+
+  oscillator.start(ctx.currentTime);
+  oscillator.stop(ctx.currentTime + duration / 1000);
+};
