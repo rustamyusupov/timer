@@ -1,3 +1,5 @@
+export const startTime = '00:00';
+
 export const millisecondsInSecond = 1000;
 export const secondsInMinute = 60;
 

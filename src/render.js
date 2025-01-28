@@ -1,7 +1,7 @@
-import { process } from './constants.js';
+import { process, startTime } from './constants.js';
 
 export const renderTimer = (elements, state) => {
-  elements.timer.textContent = state.current.time ? state.current.time : '00:00';
+  elements.timer.textContent = state.current.time ? state.current.time : startTime;
 };
 
 const renderItem = list => (timer, index) => {
@@ -31,13 +31,13 @@ const renderItem = list => (timer, index) => {
 
 export const renderList = (elements, state) => {
   const { list } = elements;
-  list.innerHTML = '';
 
+  list.innerHTML = '';
   state.timers.forEach(renderItem(list));
 };
 
-export const renderElements = (elements, state) => {
-  const { add, form, name, pause, reset, start, timer } = elements;
+export const updateVisibility = (elements, state) => {
+  const { add, form, name, pause, reset, start } = elements;
 
   switch (state.process) {
     case process.idle:

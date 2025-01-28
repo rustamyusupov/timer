@@ -1,5 +1,5 @@
 import { millisecondsInSecond, process, state } from './constants';
-import { renderElements, renderList, renderTimer } from './render';
+import { updateVisibility, renderList, renderTimer } from './render';
 import { convertSecondsToTime, convertTimeToSeconds, request } from './utils';
 
 const elements = {
@@ -28,7 +28,7 @@ const setState = newState => {
   }
 
   if (isIdle || isTimerAdded || isProcessChanged) {
-    renderElements(elements, state);
+    updateVisibility(elements, state);
     renderList(elements, state);
   }
 
