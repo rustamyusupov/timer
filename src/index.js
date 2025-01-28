@@ -91,6 +91,7 @@ const handleStartClick = () => {
 
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
   setState({ current: initial, process: process.countdown });
+  beep(250);
 };
 
 const addEventListeners = () => {
