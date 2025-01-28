@@ -80,6 +80,4 @@ export const renderElements = (elements, state) => {
     default:
       break;
   }
-
-  // timer.classList.toggle('hidden', state.timers.length === 0);
 };
