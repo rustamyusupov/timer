@@ -68,7 +68,7 @@ const updateTimer = () => {
   setState({ current: { index, time } });
 
   if (seconds > 0 && seconds <= 3) {
-    beep(30);
+    beep({ ctx: state.audioCtx });
   }
 
   if (seconds !== 0) {
@@ -80,7 +80,7 @@ const updateTimer = () => {
     return;
   }
 
-  beep();
+  beep({ ctx: state.audioCtx, duration: 500 });
   setState({
     current: { index: nextIndex, time: state.timers[nextIndex].time },
   });
@@ -91,7 +91,7 @@ const handleStartClick = () => {
 
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
   setState({ current: initial, process: process.countdown });
-  beep(250);
+  beep({ ctx: state.audioCtx, duration: 250 });
 };
 
 const addEventListeners = () => {
@@ -106,6 +106,7 @@ const addEventListeners = () => {
 };
 
 const init = async () => {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const params = new URLSearchParams(window.location.search);
   const url = params.get('url');
   let timers = [];
@@ -118,7 +119,7 @@ const init = async () => {
   }
 
   addEventListeners();
-  setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
+  setState({ audioCtx, process: timers.length > 0 ? process.ready : process.idle, timers });
 };
 
 document.addEventListener('DOMContentLoaded', init);

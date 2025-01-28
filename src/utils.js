@@ -31,8 +31,12 @@ export const request = async url => {
   }
 };
 
-export const beep = (duration = 500, frequency = 1000, volume = 2, type = 'triangle') => {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+export const beep = ({ ctx, duration = 100, frequency = 1000, volume = 2, type = 'triangle' }) => {
+  if (!ctx) {
+    console.warn('AudioContext is not provided');
+    return;
+  }
+
   const oscillator = ctx.createOscillator();
   const gainNode = ctx.createGain();
 

@@ -12,6 +12,7 @@ export const process = {
 };
 
 export const state = {
+  audioCtx: null,
   intervalId: null,
   current: {
     index: null,

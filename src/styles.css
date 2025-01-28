@@ -50,7 +50,7 @@ ul {
 }
 
 .active {
-  color: blue;
+  color: #007aff; /* -apple-system blue */
 }
 
 .remove {
