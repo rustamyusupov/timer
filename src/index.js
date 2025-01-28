@@ -105,9 +105,26 @@ const handleStartClick = () => {
   setState({ current: initial, process: process.countdown });
 };
 
-const init = () => {
+const fetchTimers = async url => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const timers = await response.json();
+
+    return timers;
+  } catch (error) {
+    console.error('Failed to fetch timers:', error);
+
+    return [];
+  }
+};
+
+const addEventListeners = () => {
   const { form, list, add, pause, reset, start } = elements;
-  const timers = JSON.parse(localStorage.getItem('timers')) || [];
 
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
@@ -115,7 +132,21 @@ const init = () => {
   pause.addEventListener('click', handlePauseClick);
   reset.addEventListener('click', handleResetClick);
   start.addEventListener('click', handleStartClick);
+};
 
+const init = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const url = params.get('url');
+  let timers = [];
+
+  if (url) {
+    timers = await fetchTimers(url);
+    localStorage.setItem('timers', JSON.stringify(timers));
+  } else {
+    timers = JSON.parse(localStorage.getItem('timers')) || [];
+  }
+
+  addEventListeners();
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
 };
 
