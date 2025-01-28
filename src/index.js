@@ -1,5 +1,5 @@
 import { millisecondsInSecond, process, state } from './constants';
-import { updateVisibility, renderList, renderTimer } from './render';
+import { render } from './render';
 import { convertSecondsToTime, convertTimeToSeconds, request } from './utils';
 
 const elements = {
@@ -14,24 +14,8 @@ const elements = {
 };
 
 const setState = newState => {
-  const prevState = { ...state };
-  const isTimerReady = prevState.process === process.idle || newState.process === process.ready;
-  const isTimeChanged = newState.current && newState.current.time !== prevState.current.time;
-  const isIdle = prevState.process === process.idle;
-  const isTimerAdded = newState.timers && newState.timers.length !== prevState.timers.length;
-  const isProcessChanged = prevState.process !== newState.process;
-
   Object.assign(state, newState);
-
-  if (isTimerReady || isTimeChanged) {
-    renderTimer(elements, state);
-  }
-
-  if (isIdle || isTimerAdded || isProcessChanged) {
-    updateVisibility(elements, state);
-    renderList(elements, state);
-  }
-
+  render(elements, state);
   localStorage.setItem('timers', JSON.stringify(state.timers));
 };
 

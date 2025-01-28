@@ -1,10 +1,10 @@
 import { process, startTime } from './constants.js';
 
-export const renderTimer = (elements, state) => {
+const renderTimer = (elements, state) => {
   elements.timer.textContent = state.current.time ? state.current.time : startTime;
 };
 
-const renderItem = list => (timer, index) => {
+const renderItem = (list, current) => (timer, index) => {
   const remove = document.createElement('button');
   const name = document.createElement('span');
   const time = document.createElement('span');
@@ -22,6 +22,7 @@ const renderItem = list => (timer, index) => {
   time.textContent = timer.time;
 
   item.classList.add('item');
+  item.classList.toggle('active', current === index);
   item.appendChild(remove);
   item.appendChild(name);
   item.appendChild(time);
@@ -29,14 +30,14 @@ const renderItem = list => (timer, index) => {
   list.appendChild(item);
 };
 
-export const renderList = (elements, state) => {
+const renderList = (elements, state) => {
   const { list } = elements;
 
   list.innerHTML = '';
-  state.timers.forEach(renderItem(list));
+  state.timers.forEach(renderItem(list, state.current.index));
 };
 
-export const updateVisibility = (elements, state) => {
+const updateVisibility = (elements, state) => {
   const { add, form, name, pause, reset, start } = elements;
 
   switch (state.process) {
@@ -80,4 +81,10 @@ export const updateVisibility = (elements, state) => {
     default:
       break;
   }
+};
+
+export const render = (elements, state) => {
+  renderTimer(elements, state);
+  updateVisibility(elements, state);
+  renderList(elements, state);
 };
