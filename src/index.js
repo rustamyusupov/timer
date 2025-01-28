@@ -22,6 +22,7 @@ const setState = newState => {
 const resetTimer = () => {
   clearInterval(state.intervalId);
   setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
+  state.noSleep?.disable();
 };
 
 const handleSubmit = event => {
@@ -92,6 +93,7 @@ const handleStartClick = () => {
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
   setState({ current: initial, process: process.countdown });
   beep({ ctx: state.audioCtx, duration: 250 });
+  state.noSleep?.enable();
 };
 
 const addEventListeners = () => {
@@ -106,6 +108,7 @@ const addEventListeners = () => {
 };
 
 const init = async () => {
+  const noSleep = new NoSleep();
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const params = new URLSearchParams(window.location.search);
   const url = params.get('url');
@@ -119,7 +122,12 @@ const init = async () => {
   }
 
   addEventListeners();
-  setState({ audioCtx, process: timers.length > 0 ? process.ready : process.idle, timers });
+  setState({
+    audioCtx,
+    noSleep,
+    process: timers.length > 0 ? process.ready : process.idle,
+    timers,
+  });
 };
 
 document.addEventListener('DOMContentLoaded', init);

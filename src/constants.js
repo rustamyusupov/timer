@@ -13,11 +13,12 @@ export const process = {
 
 export const state = {
   audioCtx: null,
-  intervalId: null,
   current: {
     index: null,
     time: null,
   },
+  intervalId: null,
+  noSleep: null,
   process: process.idle,
   timers: [],
 };
