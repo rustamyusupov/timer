@@ -1,6 +1,6 @@
 import { millisecondsInSecond, process, state } from './constants';
 import { renderElements, renderList, renderTimer } from './render';
-import { convertSecondsToTime, convertTimeToSeconds } from './utils';
+import { convertSecondsToTime, convertTimeToSeconds, request } from './utils';
 
 const elements = {
   add: document.getElementById('add'),
@@ -105,24 +105,6 @@ const handleStartClick = () => {
   setState({ current: initial, process: process.countdown });
 };
 
-const fetchTimers = async url => {
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const timers = await response.json();
-
-    return timers;
-  } catch (error) {
-    console.error('Failed to fetch timers:', error);
-
-    return [];
-  }
-};
-
 const addEventListeners = () => {
   const { form, list, add, pause, reset, start } = elements;
 
@@ -140,7 +122,7 @@ const init = async () => {
   let timers = [];
 
   if (url) {
-    timers = await fetchTimers(url);
+    timers = await request(url);
     localStorage.setItem('timers', JSON.stringify(timers));
   } else {
     timers = JSON.parse(localStorage.getItem('timers')) || [];

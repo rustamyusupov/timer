@@ -12,3 +12,21 @@ export const convertSecondsToTime = seconds => {
 
   return `${minutes}:${remaining}`;
 };
+
+export const request = async url => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error('Failed to fetch:', error);
+
+    return [];
+  }
+};
