@@ -1,6 +1,6 @@
 import { millisecondsInSecond, process, state } from './constants';
 import { render } from './render';
-import { convertSecondsToTime, convertTimeToSeconds, request } from './utils';
+import { beep, convertSecondsToTime, convertTimeToSeconds, request } from './utils';
 
 const elements = {
   add: document.getElementById('add'),
@@ -67,6 +67,10 @@ const updateTimer = () => {
   // update time
   setState({ current: { index, time } });
 
+  if (seconds > 0 && seconds <= 3) {
+    beep(30);
+  }
+
   if (seconds !== 0) {
     return;
   }
@@ -76,6 +80,7 @@ const updateTimer = () => {
     return;
   }
 
+  beep();
   setState({
     current: { index: nextIndex, time: state.timers[nextIndex].time },
   });
@@ -85,7 +90,6 @@ const handleStartClick = () => {
   const initial = state.current.time ? state.current : { index: 0, time: state.timers[0].time };
 
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
-
   setState({ current: initial, process: process.countdown });
 };
 
