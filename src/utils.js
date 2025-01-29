@@ -1,4 +1,4 @@
-import { secondsInMinute } from './constants';
+import { beepConfig, millisecondsInSecond, secondsInMinute } from './constants';
 
 export const convertTimeToSeconds = time => {
   const [minutes, seconds] = time.split(':').map(Number);
@@ -31,22 +31,32 @@ export const request = async url => {
   }
 };
 
-export const beep = ({ ctx, duration = 100, frequency = 1000, volume = 2, type = 'triangle' }) => {
-  if (!ctx) {
-    console.warn('AudioContext is not provided');
-    return;
-  }
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-  const oscillator = ctx.createOscillator();
-  const gainNode = ctx.createGain();
+export const speak = async (text, delayMs = 0) => {
+  const speech = new SpeechSynthesisUtterance(text);
 
-  oscillator.connect(gainNode);
-  gainNode.connect(ctx.destination);
-
-  gainNode.gain.value = volume;
-  oscillator.frequency.value = frequency;
-  oscillator.type = type;
-
-  oscillator.start(ctx.currentTime);
-  oscillator.stop(ctx.currentTime + duration / 1000);
+  window.speechSynthesis.speak(speech);
+  await delay(delayMs);
 };
+
+export const beep = async ({ ctx, delayMs, duration, frequency, volume, type }) =>
+  new Promise(resolve => {
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    gainNode.gain.value = volume ?? beepConfig.volume;
+    oscillator.frequency.value = frequency ?? beepConfig.frequency;
+    oscillator.type = type ?? beepConfig.type;
+
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + (duration ?? beepConfig.duration) / millisecondsInSecond);
+
+    oscillator.onended = async () => {
+      await delay(delayMs ?? beepConfig.delayMs);
+      resolve();
+    };
+  });
