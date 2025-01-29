@@ -1,6 +1,6 @@
-import { millisecondsInSecond, process, state } from './constants';
+import { finishPhrase, millisecondsInSecond, process, state } from './constants';
 import { render } from './render';
-import { beep, convertSecondsToTime, convertTimeToSeconds, request } from './utils';
+import { beep, convertSecondsToTime, convertTimeToSeconds, request, speak } from './utils';
 
 const elements = {
   add: document.getElementById('add'),
@@ -21,7 +21,11 @@ const setState = newState => {
 
 const resetTimer = () => {
   clearInterval(state.intervalId);
-  setState({ intervalId: null, current: { index: null, time: null }, process: process.ready });
+  setState({
+    intervalId: null,
+    current: { index: null, name: null, time: null },
+    process: process.ready,
+  });
   state.noSleep?.disable();
 };
 
@@ -45,7 +49,6 @@ const handleListClick = event => {
   const index = event.target.dataset.index;
 
   timers.splice(index, 1);
-
   setState({ process: timers.length > 0 ? process.ready : process.idle, timers });
 };
 
@@ -58,7 +61,7 @@ const handlePauseClick = () => {
 
 const handleResetClick = () => resetTimer();
 
-const updateTimer = () => {
+const updateTimer = async () => {
   const index = state.current.index;
   const nextIndex = index + 1;
   const isLastTimer = state.timers.length - 1 === index;
@@ -66,10 +69,10 @@ const updateTimer = () => {
   const time = convertSecondsToTime(seconds);
 
   // update time
-  setState({ current: { index, time } });
+  setState({ current: { index, name: state.timers[index].name, time } });
 
   if (seconds > 0 && seconds <= 3) {
-    beep({ ctx: state.audioCtx });
+    beep({ ctx: state.audioCtx, duration: 100 });
   }
 
   if (seconds !== 0) {
@@ -78,22 +81,23 @@ const updateTimer = () => {
 
   if (isLastTimer) {
     resetTimer();
+    speak(finishPhrase);
     return;
   }
 
-  beep({ ctx: state.audioCtx, duration: 500 });
-  setState({
-    current: { index: nextIndex, time: state.timers[nextIndex].time },
-  });
+  await beep({ ctx: state.audioCtx });
+  speak(state.timers[nextIndex].name);
+  setState({ current: { index: nextIndex, ...state.timers[nextIndex] } });
 };
 
-const handleStartClick = () => {
-  const initial = state.current.time ? state.current : { index: 0, time: state.timers[0].time };
+const handleStartClick = async () => {
+  const initial = state.current.time ? state.current : { index: 0, ...state.timers[0] };
 
+  state.noSleep?.enable();
+  await beep({ ctx: state.audioCtx });
+  speak(initial.name);
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
   setState({ current: initial, process: process.countdown });
-  beep({ ctx: state.audioCtx, duration: 250 });
-  state.noSleep?.enable();
 };
 
 const addEventListeners = () => {
