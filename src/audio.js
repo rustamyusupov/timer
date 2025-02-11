@@ -48,10 +48,6 @@ export const enableAudio = () => {
 export const speak = async (text, delayMs = 0) => {
   const speech = new SpeechSynthesisUtterance(text);
 
-  speech.pitch = 1;
-  speech.volume = 1;
-  speech.rate = 1;
-
   window.speechSynthesis.speak(speech);
   await delay(delayMs);
 };
