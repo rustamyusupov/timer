@@ -64,7 +64,7 @@ const updateTimer = async () => {
   setState({ current: { index, name: state.timers[index].name, time } });
 
   if (seconds > 0 && seconds <= 3) {
-    beep({ duration: 100 });
+    beep(100);
   }
 
   if (seconds !== 0) {

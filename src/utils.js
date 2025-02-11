@@ -1,4 +1,4 @@
-import { beepConfig, millisecondsInSecond, secondsInMinute } from './constants';
+import { secondsInMinute } from './constants';
 
 export const timeToSeconds = time => {
   const [minutes, seconds] = time.split(':').map(Number);

@@ -3,7 +3,6 @@ export const finishPhrase = 'Workout complete!';
 
 export const millisecondsInSecond = 1000;
 export const secondsInMinute = 60;
-export const defaultDuration = millisecondsInSecond / 2;
 
 export const elements = {
   add: document.getElementById('add'),
@@ -33,12 +32,4 @@ export const state = {
   intervalId: null,
   process: process.idle,
   timers: [],
-};
-
-export const beepConfig = {
-  delayMs: defaultDuration,
-  duration: defaultDuration,
-  frequency: 1000,
-  volume: 1,
-  type: 'sine',
 };
