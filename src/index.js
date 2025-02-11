@@ -1,6 +1,6 @@
 import { elements, finishPhrase, millisecondsInSecond, process, state } from './constants';
 import { render } from './render';
-import { beep, secondsToTime, timeToSeconds, request, speak } from './utils';
+import { beep, secondsToTime, timeToSeconds, request, speak, loadTimers } from './utils';
 
 const noSleep = new NoSleep();
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -92,8 +92,9 @@ const handleStartClick = async () => {
   setState({ current: initial, process: process.countdown });
 };
 
-const addEventListeners = () => {
+const init = async () => {
   const { form, list, add, pause, reset, start } = elements;
+  const timers = await loadTimers();
 
   form.addEventListener('submit', handleSubmit);
   list.addEventListener('click', handleListClick);
@@ -101,19 +102,7 @@ const addEventListeners = () => {
   pause.addEventListener('click', handlePauseClick);
   reset.addEventListener('click', handleResetClick);
   start.addEventListener('click', handleStartClick);
-};
 
-const loadTimers = async () => {
-  const params = new URLSearchParams(window.location.search);
-  const url = params.get('url');
-
-  return url ? await request(url) : JSON.parse(localStorage.getItem('timers')) || [];
-};
-
-const init = async () => {
-  const timers = await loadTimers();
-
-  addEventListeners();
   setState({
     process: timers.length > 0 ? process.ready : process.idle,
     timers,

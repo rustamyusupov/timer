@@ -31,6 +31,13 @@ export const request = async url => {
   }
 };
 
+export const loadTimers = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const url = params.get('url');
+
+  return url ? await request(url) : JSON.parse(localStorage.getItem('timers')) || [];
+};
+
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const getVoicebyLang = lang =>
