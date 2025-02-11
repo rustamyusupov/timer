@@ -40,26 +40,6 @@ export const loadTimers = async () => {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const getVoicebyLang = lang =>
-  window.speechSynthesis.getVoices().find(voice => voice.lang.startsWith(lang));
-
-export const speak = async (text, delayMs = 0) => {
-  const speech = new SpeechSynthesisUtterance(text);
-  const english = getVoicebyLang('en');
-
-  speech.voice = english;
-  speech.lang = english.lang;
-  speech.voiceURI = english.voiceURI;
-  speech.pitch = 1;
-  speech.volume = 1;
-  speech.rate = 1;
-
-  console.log(speech);
-
-  window.speechSynthesis.speak(speech);
-  await delay(delayMs);
-};
-
 export const beep = async ({ audioCtx, delayMs, duration, frequency, volume, type }) =>
   new Promise(resolve => {
     const oscillator = audioCtx.createOscillator();
@@ -82,3 +62,32 @@ export const beep = async ({ audioCtx, delayMs, duration, frequency, volume, typ
       resolve();
     };
   });
+
+export const enableSpeak = () => {
+  const isiOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+  if (!isiOS) {
+    return;
+  }
+
+  const simulateSpeech = () => {
+    const lecture = new SpeechSynthesisUtterance('hello');
+
+    lecture.volume = 0;
+    speechSynthesis.speak(lecture);
+    document.removeEventListener('click', simulateSpeech);
+  };
+
+  document.addEventListener('click', simulateSpeech);
+};
+
+export const speak = async (text, delayMs = 0) => {
+  const speech = new SpeechSynthesisUtterance(text);
+
+  speech.pitch = 1;
+  speech.volume = 1;
+  speech.rate = 1;
+
+  window.speechSynthesis.speak(speech);
+  await delay(delayMs);
+};
