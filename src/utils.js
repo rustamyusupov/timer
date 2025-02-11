@@ -1,12 +1,12 @@
 import { beepConfig, millisecondsInSecond, secondsInMinute } from './constants';
 
-export const convertTimeToSeconds = time => {
+export const timeToSeconds = time => {
   const [minutes, seconds] = time.split(':').map(Number);
 
   return minutes * secondsInMinute + seconds;
 };
 
-export const convertSecondsToTime = seconds => {
+export const secondsToTime = seconds => {
   const minutes = String(Math.floor(seconds / secondsInMinute)).padStart(2, '0');
   const remaining = String(seconds % secondsInMinute).padStart(2, '0');
 
@@ -33,27 +33,42 @@ export const request = async url => {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const getVoicebyLang = lang =>
+  window.speechSynthesis.getVoices().find(voice => voice.lang.startsWith(lang));
+
 export const speak = async (text, delayMs = 0) => {
   const speech = new SpeechSynthesisUtterance(text);
+  const english = getVoicebyLang('en');
+
+  speech.voice = english;
+  speech.lang = english.lang;
+  speech.voiceURI = english.voiceURI;
+  speech.pitch = 1;
+  speech.volume = 1;
+  speech.rate = 1;
+
+  console.log(speech);
 
   window.speechSynthesis.speak(speech);
   await delay(delayMs);
 };
 
-export const beep = async ({ ctx, delayMs, duration, frequency, volume, type }) =>
+export const beep = async ({ audioCtx, delayMs, duration, frequency, volume, type }) =>
   new Promise(resolve => {
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
 
     oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
+    gainNode.connect(audioCtx.destination);
 
     gainNode.gain.value = volume ?? beepConfig.volume;
     oscillator.frequency.value = frequency ?? beepConfig.frequency;
     oscillator.type = type ?? beepConfig.type;
 
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + (duration ?? beepConfig.duration) / millisecondsInSecond);
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(
+      audioCtx.currentTime + (duration ?? beepConfig.duration) / millisecondsInSecond
+    );
 
     oscillator.onended = async () => {
       await delay(delayMs ?? beepConfig.delayMs);
