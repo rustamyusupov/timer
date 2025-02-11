@@ -1,9 +1,9 @@
+import { beep, enableAudio, speak } from './audio';
 import { elements, finishPhrase, millisecondsInSecond, process, state } from './constants';
 import { render } from './render';
-import { beep, secondsToTime, timeToSeconds, speak, loadTimers, enableSpeak } from './utils';
+import { secondsToTime, timeToSeconds, loadTimers } from './utils';
 
 const noSleep = new NoSleep();
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const setState = newState => {
   Object.assign(state, newState);
@@ -64,7 +64,7 @@ const updateTimer = async () => {
   setState({ current: { index, name: state.timers[index].name, time } });
 
   if (seconds > 0 && seconds <= 3) {
-    beep({ audioCtx, duration: 100 });
+    beep({ duration: 100 });
   }
 
   if (seconds !== 0) {
@@ -77,15 +77,16 @@ const updateTimer = async () => {
     return;
   }
 
-  await beep({ audioCtx });
+  await beep();
   speak(state.timers[nextIndex].name);
   setState({ current: { index: nextIndex, ...state.timers[nextIndex] } });
 };
 
 const handleStartClick = async () => {
   const initial = state.current.time ? state.current : { index: 0, ...state.timers[0] };
+
   noSleep?.enable();
-  await beep({ audioCtx });
+  await beep();
   speak(initial.name);
   state.intervalId = setInterval(updateTimer, millisecondsInSecond);
   setState({ current: initial, process: process.countdown });
@@ -107,7 +108,7 @@ const init = async () => {
     timers,
   });
 
-  enableSpeak();
+  enableAudio();
 };
 
 document.addEventListener('DOMContentLoaded', init);
