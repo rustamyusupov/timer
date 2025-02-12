@@ -1,7 +1,9 @@
 import { millisecondsInSecond } from './constants';
 import { delay } from './utils';
 
-export const beep = async (ctx, duration = 500, volume = 1) =>
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+export const beep = async (duration = 500, volume = 1) =>
   new Promise(resolve => {
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
