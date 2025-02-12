@@ -1,14 +1,8 @@
 import { millisecondsInSecond } from './constants';
 import { delay } from './utils';
 
-const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-export const beep = async (duration = 500, volume = 1) => {
-  if (ctx.state === 'suspended') {
-    await ctx.resume();
-  }
-
-  return new Promise(resolve => {
+export const beep = async (ctx, duration = 500, volume = 1) =>
+  new Promise(resolve => {
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
@@ -27,7 +21,6 @@ export const beep = async (duration = 500, volume = 1) => {
       resolve();
     };
   });
-};
 
 export const speak = text => {
   const speech = new SpeechSynthesisUtterance(text);
@@ -47,8 +40,6 @@ export const enableAudio = () => {
 
     lecture.volume = 0;
     speechSynthesis.speak(lecture);
-
-    beep(100, 0);
 
     document.removeEventListener('click', simulateAudio);
   };
