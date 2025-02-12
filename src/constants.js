@@ -24,6 +24,7 @@ export const process = {
 };
 
 export const state = {
+  audioCtx: null,
   current: {
     index: null,
     name: null,
