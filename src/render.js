@@ -1,5 +1,14 @@
 import { process, startTime } from './constants.js';
 
+const renderVersion = () => {
+  const body = document.querySelector('body');
+  const p = document.createElement('p');
+
+  p.classList.add('version');
+  p.textContent = `v${__APP_VERSION__}`;
+  body.appendChild(p);
+};
+
 const renderTimer = (elements, state) => {
   elements.timer.textContent = state.current.time ? state.current.time : startTime;
 };
@@ -84,6 +93,7 @@ const updateVisibility = (elements, state) => {
 };
 
 export const render = (elements, state) => {
+  renderVersion();
   renderList(elements, state);
   renderTimer(elements, state);
   updateVisibility(elements, state);

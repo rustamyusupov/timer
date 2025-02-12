@@ -28,6 +28,13 @@ ul {
   padding: 16px;
 }
 
+.version {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  color: lightgray;
+}
+
 .timer {
   display: flex;
   font-size: 50px;
