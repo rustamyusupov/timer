@@ -3,8 +3,12 @@ import { delay } from './utils';
 
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-export const beep = async (duration = 500, volume = 1) =>
-  new Promise(resolve => {
+export const beep = async (duration = 500, volume = 1) => {
+  if (ctx.state === 'suspended') {
+    await ctx.resume();
+  }
+
+  return new Promise(resolve => {
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
@@ -23,6 +27,7 @@ export const beep = async (duration = 500, volume = 1) =>
       resolve();
     };
   });
+};
 
 export const speak = text => {
   const speech = new SpeechSynthesisUtterance(text);
