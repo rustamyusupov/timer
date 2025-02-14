@@ -10,7 +10,10 @@ const renderVersion = () => {
 };
 
 const renderTimer = (elements, state) => {
-  elements.timer.textContent = state.current.time ? state.current.time : startTime;
+  const timeText = state.current.time ? state.current.time : startTime;
+  const [minutes, seconds] = timeText.split(':');
+
+  elements.timer.innerHTML = `${minutes}<span class="semicolon">:</span>${seconds}`;
 };
 
 const renderItem = (list, current) => (timer, index) => {
