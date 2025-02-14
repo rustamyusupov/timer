@@ -1,7 +1,7 @@
 {
   "name": "interval-timer",
   "author": "Rustam Yusupov",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "ISC",
   "main": "script.js",
   "scripts": {
