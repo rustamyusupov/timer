@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/interval-timer/sw.js', { scope: '/interval-timer/' })})}
