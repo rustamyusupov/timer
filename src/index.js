@@ -60,7 +60,6 @@ const updateTimer = async () => {
   const seconds = timeToSeconds(state.current.time) - 1;
   const time = secondsToTime(seconds);
 
-  // update time
   setState({ current: { index, name: state.timers[index].name, time } });
 
   if (seconds > 0 && seconds <= 3) {
