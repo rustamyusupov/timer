@@ -1,4 +1,4 @@
-# Interval Timer
+# IntervalTimer
 
 ### Example
 
