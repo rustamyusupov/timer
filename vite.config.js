@@ -1,5 +1,5 @@
 export default {
-  base: '/interval-timer',
+  base: '/timer',
   build: {
     rollupOptions: {
       output: {

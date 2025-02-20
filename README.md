@@ -1,5 +1,5 @@
-# IntervalTimer
+# Timer
 
 ### Example
 
-https://rustamyusupov.github.io/interval-timer/?url=https://raw.githubusercontent.com/rustamyusupov/interval-timer/refs/heads/main/example.json
+https://rustamyusupov.github.io/timer/?url=https://raw.githubusercontent.com/rustamyusupov/timer/refs/heads/main/example.json
