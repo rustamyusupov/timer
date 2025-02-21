@@ -1,6 +1,6 @@
 # Timer
 
-![Timer](public/favicon.png)
+<img src="public/favicon.png" alt="Timer" width="100"/>
 
 ## Description
 
