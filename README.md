@@ -1,10 +1,11 @@
 # Timer
 
-<img src="public/favicon.png" alt="Timer" width="100"/>
+<img src="public/favicon.png" alt="Timer" width="50"/>
 
 ## Description
 
 This is a simple timer application that allows users to create, manage, and run multiple timers.
+This application is optimized for use on iOS Safari, ensuring the best performance and user experience on Apple devices.
 
 ## Features
 
