@@ -1,6 +1,6 @@
 # Timer
 
-<img src="public/favicon.png" alt="Timer" width="50"/>
+<img src="public/favicon.png" alt="Timer" width="100"/>
 
 ## Description
 
