@@ -4,7 +4,7 @@
 
 ## Description
 
-This is a simple timer application that allows users to create, manage, and run multiple timers. It includes features such as adding new timers, starting, pausing, and resetting the timers, and providing audio feedback.
+This is a simple timer application that allows users to create, manage, and run multiple timers.
 
 ## Features
 
