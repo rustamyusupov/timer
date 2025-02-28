@@ -27,13 +27,6 @@ ul {
   padding: 16px;
 }
 
-.version {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  color: lightgray;
-}
-
 .timer,
 .semicolon {
   display: flex;
@@ -125,4 +118,10 @@ field.time {
 
 .save {
   flex: 1;
+}
+
+.version {
+  color: lightgray;
+  margin-top: auto;
+  align-self: flex-end;
 }

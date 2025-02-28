@@ -1,19 +1,12 @@
 import { process, startTime } from './constants.js';
 
-const renderVersion = () => {
-  const body = document.querySelector('body');
-  const p = document.createElement('p');
+const renderVersion = ({ version }) => (version.textContent = `v${__APP_VERSION__}`);
 
-  p.classList.add('version');
-  p.textContent = `v${__APP_VERSION__}`;
-  body.appendChild(p);
-};
-
-const renderTimer = (elements, state) => {
+const renderTimer = ({ timer }, state) => {
   const timeText = state.current.time ? state.current.time : startTime;
   const [minutes, seconds] = timeText.split(':');
 
-  elements.timer.innerHTML = `${minutes}<span class="semicolon">:</span>${seconds}`;
+  timer.innerHTML = `${minutes}<span class="semicolon">:</span>${seconds}`;
 };
 
 const renderItem = (list, current) => (timer, index) => {
@@ -42,16 +35,12 @@ const renderItem = (list, current) => (timer, index) => {
   list.appendChild(item);
 };
 
-const renderList = (elements, state) => {
-  const { list } = elements;
-
+const renderList = ({ list }, state) => {
   list.innerHTML = '';
   state.timers.forEach(renderItem(list, state.current.index));
 };
 
-const updateVisibility = (elements, state) => {
-  const { add, form, name, pause, reset, start } = elements;
-
+const updateVisibility = ({ add, form, name, pause, reset, start }, state) => {
   switch (state.process) {
     case process.idle:
       add.classList.remove('hidden');
@@ -96,7 +85,7 @@ const updateVisibility = (elements, state) => {
 };
 
 export const render = (elements, state) => {
-  renderVersion();
+  renderVersion(elements);
   renderList(elements, state);
   renderTimer(elements, state);
   updateVisibility(elements, state);

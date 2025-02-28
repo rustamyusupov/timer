@@ -13,6 +13,7 @@ export const elements = {
   reset: document.getElementById('reset'),
   start: document.getElementById('start'),
   timer: document.getElementById('timer'),
+  version: document.getElementById('version'),
 };
 
 export const process = {
