@@ -30,8 +30,8 @@ ul {
 .timer,
 .semicolon {
   display: flex;
-  font-family: monospace;
   font-size: 70px;
+  font-variant-numeric: tabular-nums;
   justify-content: center;
   line-height: 70px;
 }
