@@ -31,26 +31,26 @@ export const renderList = (currentId, timers) => {
   });
 };
 
-export const updateUI = (currentState, states) => {
+export const updateUI = (currentState, process) => {
   const add = document.getElementById('add');
   const start = document.getElementById('start');
   const stop = document.getElementById('stop');
   const reset = document.getElementById('reset');
 
   switch (currentState) {
-    case states.IDLE:
+    case process.IDLE:
       add.classList.remove('hidden');
       start.classList.remove('hidden');
       stop.classList.add('hidden');
       reset.classList.add('hidden');
       break;
-    case states.RUNNING:
+    case process.RUNNING:
       add.classList.add('hidden');
       start.classList.add('hidden');
       stop.classList.remove('hidden');
       reset.classList.remove('hidden');
       break;
-    case states.PAUSED:
+    case process.PAUSED:
       add.classList.add('hidden');
       start.classList.remove('hidden');
       stop.classList.add('hidden');

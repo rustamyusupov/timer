@@ -1,6 +1,6 @@
 import { renderList, updateUI } from './ui';
 
-const states = {
+const process = {
   IDLE: 'idle',
   RUNNING: 'running',
   PAUSED: 'paused',
@@ -8,26 +8,29 @@ const states = {
 
 const state = {
   currentId: null,
-  currentState: states.IDLE,
+  currentState: process.IDLE,
   timers: [],
 };
 
 const actions = {
+  add: () => {
+    renderList(state.currentId, state.timers);
+  },
   start: () => {
-    if (state.currentState === states.IDLE || state.currentState === states.PAUSED) {
-      state.currentState = states.RUNNING;
-      updateUI(state.currentState, states);
+    if (state.currentState === process.IDLE || state.currentState === process.PAUSED) {
+      state.currentState = process.RUNNING;
+      updateUI(state.currentState, process);
     }
   },
   stop: () => {
-    if (state.currentState === states.RUNNING) {
-      state.currentState = states.PAUSED;
-      updateUI(state.currentState, states);
+    if (state.currentState === process.RUNNING) {
+      state.currentState = process.PAUSED;
+      updateUI(state.currentState, process);
     }
   },
   reset: () => {
-    state.currentState = states.IDLE;
-    updateUI(state.currentState, states);
+    state.currentState = process.IDLE;
+    updateUI(state.currentState, process);
   },
   remove: event => {
     state.timers.splice(parseInt(event.target.dataset.index), 1);
@@ -48,13 +51,13 @@ const init = () => {
   const reset = document.getElementById('reset');
   const list = document.getElementById('list');
 
-  add.addEventListener('click', actions.addTimer);
+  add.addEventListener('click', actions.add);
   start.addEventListener('click', actions.start);
   stop.addEventListener('click', actions.stop);
   reset.addEventListener('click', actions.reset);
   list.addEventListener('click', actions.remove);
 
-  updateUI(state.currentState, states);
+  updateUI(state.currentState, process);
   renderList(state.currentId, state.timers);
 };
 
