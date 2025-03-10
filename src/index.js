@@ -29,12 +29,11 @@ const actions = {
     state.currentState = states.IDLE;
     updateUI(state.currentState, states);
   },
+  remove: event => {
+    state.timers.splice(parseInt(event.target.dataset.index), 1);
+    renderList(state.currentId, state.timers);
+  },
 };
-
-const handleAdd = () => actions.addTimer();
-const handleStart = () => actions.start();
-const handleStop = () => actions.stop();
-const handleReset = () => actions.reset();
 
 const init = () => {
   state.timers = [
@@ -47,11 +46,13 @@ const init = () => {
   const start = document.getElementById('start');
   const stop = document.getElementById('stop');
   const reset = document.getElementById('reset');
+  const list = document.getElementById('list');
 
-  add.addEventListener('click', handleAdd);
-  start.addEventListener('click', handleStart);
-  stop.addEventListener('click', handleStop);
-  reset.addEventListener('click', handleReset);
+  add.addEventListener('click', actions.addTimer);
+  start.addEventListener('click', actions.start);
+  stop.addEventListener('click', actions.stop);
+  reset.addEventListener('click', actions.reset);
+  list.addEventListener('click', actions.remove);
 
   updateUI(state.currentState, states);
   renderList(state.currentId, state.timers);
