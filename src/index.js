@@ -46,27 +46,35 @@ const actions = {
   },
 };
 
-const init = () => {
+const initState = () => {
   state.timers = [
     { id: 0, name: 'timer-1', time: 5 },
     { id: 1, name: 'timer-2', time: 3 },
     { id: 2, name: 'timer-3', time: 7 },
   ];
+};
 
-  const add = document.getElementById('add');
-  const start = document.getElementById('start');
-  const stop = document.getElementById('stop');
-  const reset = document.getElementById('reset');
-  const list = document.getElementById('list');
-  const form = document.getElementById('form');
+const initHandlers = () => {
+  const items = [
+    { id: 'add', event: 'click', handler: actions.add },
+    { id: 'start', event: 'click', handler: actions.start },
+    { id: 'stop', event: 'click', handler: actions.stop },
+    { id: 'reset', event: 'click', handler: actions.reset },
+    { id: 'list', event: 'click', handler: actions.remove },
+    { id: 'form', event: 'submit', handler: actions.submit },
+  ];
 
-  add.addEventListener('click', actions.add);
-  start.addEventListener('click', actions.start);
-  stop.addEventListener('click', actions.stop);
-  reset.addEventListener('click', actions.reset);
-  list.addEventListener('click', actions.remove);
-  form.addEventListener('submit', actions.submit);
+  items.forEach(({ id, event, handler }) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener(event, handler);
+    }
+  });
+};
 
+const init = () => {
+  initState();
+  initHandlers();
   updateUI(state.currentState, process);
   renderList(state.currentId, state.timers);
 };
