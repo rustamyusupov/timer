@@ -1,4 +1,4 @@
-import { renderList, updateUI } from './ui';
+import { parseForm, renderList, toggleForm, updateUI } from './ui';
 
 const process = {
   IDLE: 'idle',
@@ -14,7 +14,7 @@ const state = {
 
 const actions = {
   add: () => {
-    renderList(state.currentId, state.timers);
+    toggleForm(true);
   },
   start: () => {
     if (state.currentState === process.IDLE || state.currentState === process.PAUSED) {
@@ -36,6 +36,11 @@ const actions = {
     state.timers.splice(parseInt(event.target.dataset.index), 1);
     renderList(state.currentId, state.timers);
   },
+  submit: event => {
+    state.timers.push({ id: state.timers.length, ...parseForm(event.target) });
+    toggleForm(false);
+    renderList(state.currentId, state.timers);
+  },
 };
 
 const init = () => {
@@ -50,12 +55,14 @@ const init = () => {
   const stop = document.getElementById('stop');
   const reset = document.getElementById('reset');
   const list = document.getElementById('list');
+  const form = document.getElementById('form');
 
   add.addEventListener('click', actions.add);
   start.addEventListener('click', actions.start);
   stop.addEventListener('click', actions.stop);
   reset.addEventListener('click', actions.reset);
   list.addEventListener('click', actions.remove);
+  form.addEventListener('submit', actions.submit);
 
   updateUI(state.currentState, process);
   renderList(state.currentId, state.timers);

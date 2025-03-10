@@ -87,10 +87,6 @@ ul {
   width: 100%;
 }
 
-.hidden {
-  display: none;
-}
-
 .button,
 .field {
   font-size: 24px;
@@ -124,4 +120,8 @@ field.time {
   color: lightgray;
   margin-top: auto;
   align-self: flex-end;
+}
+
+.hidden {
+  display: none;
 }

@@ -1,4 +1,4 @@
-import { secondsToTime } from './utils';
+import { secondsToTime, timeToSeconds } from './utils';
 
 export const renderList = (currentId, timers) => {
   const list = document.getElementById('list');
@@ -57,4 +57,25 @@ export const updateUI = (currentState, process) => {
       reset.classList.remove('hidden');
       break;
   }
+};
+
+export const toggleForm = show => {
+  const actions = document.querySelector('.actions');
+  const form = document.getElementById('form');
+  const name = document.getElementById('name');
+
+  actions.classList.toggle('hidden', show);
+  form.classList.toggle('hidden', !show);
+  name.focus();
+};
+
+export const parseForm = target => {
+  const data = new FormData(target);
+  const name = document.getElementById('name');
+
+  const values = Object.fromEntries(data.entries());
+  const timer = { name: values.name, time: timeToSeconds(values.time) };
+  name.value = '';
+
+  return timer;
 };
