@@ -13,10 +13,6 @@ const state = {
 };
 
 const actions = {
-  add: (name, time) => {
-    // Add a new timer
-    updateUI(state.currentState, states);
-  },
   start: () => {
     if (state.currentState === states.IDLE || state.currentState === states.PAUSED) {
       state.currentState = states.RUNNING;
