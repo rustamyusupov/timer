@@ -78,6 +78,10 @@ ul {
   margin-right: auto;
 }
 
+.text.time {
+  font-variant-numeric: tabular-nums;
+}
+
 .form {
   align-items: flex-end;
   display: flex;
