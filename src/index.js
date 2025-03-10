@@ -37,21 +37,23 @@ const actions = {
   remove: event => {
     state.timers.splice(parseInt(event.target.dataset.index), 1);
     renderList(state.currentId, state.timers);
+    saveState();
   },
   submit: event => {
     state.currentState = process.IDLE;
     state.timers.push({ id: state.timers.length, ...parseForm(event.target) });
     updateUI(state.currentState, process);
     renderList(state.currentId, state.timers);
+    saveState();
   },
 };
 
 const initState = () => {
-  state.timers = [
-    { id: 0, name: 'timer-1', time: 5 },
-    { id: 1, name: 'timer-2', time: 3 },
-    { id: 2, name: 'timer-3', time: 7 },
-  ];
+  state.timers = JSON.parse(localStorage.getItem('timers')) || [];
+};
+
+const saveState = () => {
+  localStorage.setItem('timers', JSON.stringify(state.timers));
 };
 
 const initHandlers = () => {
