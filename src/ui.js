@@ -32,41 +32,49 @@ export const renderList = (currentId, timers) => {
 };
 
 export const updateUI = (currentState, process) => {
+  const actions = document.getElementById('actions');
+  const form = document.getElementById('form');
+  const name = document.getElementById('name');
   const add = document.getElementById('add');
   const start = document.getElementById('start');
   const stop = document.getElementById('stop');
   const reset = document.getElementById('reset');
 
   switch (currentState) {
+    case process.ADD:
+      actions.classList.add('hidden');
+      add.classList.add('hidden');
+      form.classList.remove('hidden');
+      reset.classList.add('hidden');
+      start.classList.add('hidden');
+      stop.classList.add('hidden');
+      name.focus();
+      break;
     case process.IDLE:
+      actions.classList.remove('hidden');
       add.classList.remove('hidden');
+      form.classList.add('hidden');
+      reset.classList.add('hidden');
       start.classList.remove('hidden');
       stop.classList.add('hidden');
-      reset.classList.add('hidden');
       break;
     case process.RUNNING:
+      actions.classList.remove('hidden');
       add.classList.add('hidden');
+      form.classList.add('hidden');
+      reset.classList.remove('hidden');
       start.classList.add('hidden');
       stop.classList.remove('hidden');
-      reset.classList.remove('hidden');
       break;
     case process.PAUSED:
+      actions.classList.remove('hidden');
       add.classList.add('hidden');
+      form.classList.add('hidden');
+      reset.classList.remove('hidden');
       start.classList.remove('hidden');
       stop.classList.add('hidden');
-      reset.classList.remove('hidden');
       break;
   }
-};
-
-export const toggleForm = show => {
-  const actions = document.querySelector('.actions');
-  const form = document.getElementById('form');
-  const name = document.getElementById('name');
-
-  actions.classList.toggle('hidden', show);
-  form.classList.toggle('hidden', !show);
-  name.focus();
 };
 
 export const parseForm = target => {

@@ -1,6 +1,7 @@
-import { parseForm, renderList, toggleForm, updateUI } from './ui';
+import { parseForm, renderList, updateUI } from './ui';
 
 const process = {
+  ADD: 'add',
   IDLE: 'idle',
   RUNNING: 'running',
   PAUSED: 'paused',
@@ -14,7 +15,8 @@ const state = {
 
 const actions = {
   add: () => {
-    toggleForm(true);
+    state.currentState = process.ADD;
+    updateUI(state.currentState, process);
   },
   start: () => {
     if (state.currentState === process.IDLE || state.currentState === process.PAUSED) {
@@ -37,8 +39,9 @@ const actions = {
     renderList(state.currentId, state.timers);
   },
   submit: event => {
+    state.currentState = process.IDLE;
     state.timers.push({ id: state.timers.length, ...parseForm(event.target) });
-    toggleForm(false);
+    updateUI(state.currentState, process);
     renderList(state.currentId, state.timers);
   },
 };
