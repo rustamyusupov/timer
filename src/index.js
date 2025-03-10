@@ -1,7 +1,7 @@
 import { parseForm, renderList, updateUI } from './ui';
 
 const process = {
-  ADD: 'add',
+  ADDING: 'adding',
   IDLE: 'idle',
   RUNNING: 'running',
   PAUSED: 'paused',
@@ -15,7 +15,7 @@ const state = {
 
 const actions = {
   add: () => {
-    state.currentState = process.ADD;
+    state.currentState = process.ADDING;
     updateUI(state.currentState, process);
   },
   start: () => {

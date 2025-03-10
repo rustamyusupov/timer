@@ -41,15 +41,6 @@ export const updateUI = (currentState, process) => {
   const reset = document.getElementById('reset');
 
   switch (currentState) {
-    case process.ADD:
-      actions.classList.add('hidden');
-      add.classList.add('hidden');
-      form.classList.remove('hidden');
-      reset.classList.add('hidden');
-      start.classList.add('hidden');
-      stop.classList.add('hidden');
-      name.focus();
-      break;
     case process.IDLE:
       actions.classList.remove('hidden');
       add.classList.remove('hidden');
@@ -57,6 +48,15 @@ export const updateUI = (currentState, process) => {
       reset.classList.add('hidden');
       start.classList.remove('hidden');
       stop.classList.add('hidden');
+      break;
+    case process.ADDING:
+      actions.classList.add('hidden');
+      add.classList.add('hidden');
+      form.classList.remove('hidden');
+      reset.classList.add('hidden');
+      start.classList.add('hidden');
+      stop.classList.add('hidden');
+      name.focus();
       break;
     case process.RUNNING:
       actions.classList.remove('hidden');
