@@ -1,3 +1,5 @@
+import { secondsToTime } from './utils';
+
 const STATES = {
   IDLE: 'idle',
   RUNNING: 'running',
@@ -71,7 +73,44 @@ const handleStart = () => actions.start();
 const handleStop = () => actions.stop();
 const handleReset = () => actions.reset();
 
+const renderList = () => {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  state.timers.forEach((timer, index) => {
+    const remove = document.createElement('button');
+    const name = document.createElement('span');
+    const time = document.createElement('span');
+    const item = document.createElement('li');
+
+    remove.classList.add('remove');
+    remove.setAttribute('type', 'button');
+    remove.textContent = '✖';
+    remove.dataset.index = index;
+
+    name.classList.add('text', 'name');
+    name.textContent = timer.name;
+
+    time.classList.add('text', 'time');
+    time.textContent = secondsToTime(timer.time);
+
+    item.classList.add('item');
+    item.classList.toggle('active', timer.id === state.activeTimerId);
+    item.appendChild(remove);
+    item.appendChild(name);
+    item.appendChild(time);
+
+    list.appendChild(item);
+  });
+};
+
 const init = () => {
+  state.timers = [
+    { id: 0, name: 'timer-1', time: 5 },
+    { id: 1, name: 'timer-2', time: 3 },
+    { id: 2, name: 'timer-3', time: 7 },
+  ];
+
   const add = document.getElementById('add');
   const start = document.getElementById('start');
   const stop = document.getElementById('stop');
@@ -83,6 +122,7 @@ const init = () => {
   reset.addEventListener('click', handleReset);
 
   updateUI();
+  renderList();
 };
 
 document.addEventListener('DOMContentLoaded', init);
