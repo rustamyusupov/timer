@@ -6,23 +6,26 @@ const timers = [
   { id: 2, name: 'Timer 3', time: 3 },
 ];
 
-let currentTimer = null;
-let intervalId = null;
-let isRunning = false;
-let time = 0;
+const state = {
+  currentTimer: null,
+  intervalId: null,
+  isRunning: false,
+  time: 0,
+  timers,
+};
 
 const startTimer = () => {
-  intervalId = setInterval(() => {}, 1000);
+  state.intervalId = setInterval(() => {}, 1000);
 };
 
 const stopTimer = () => {
-  clearInterval(intervalId);
+  clearInterval(state.intervalId);
 };
 
 const handleToggle = () => {
   const toggle = document.getElementById('toggle');
-  isRunning = !isRunning;
-  toggle.innerHTML = isRunning ? 'Stop' : 'Start';
+  state.isRunning = !state.isRunning;
+  toggle.innerHTML = state.isRunning ? 'Stop' : 'Start';
 };
 
 const handleReset = () => {};
@@ -34,8 +37,8 @@ const init = () => {
   toggle.addEventListener('click', handleToggle);
   reset.addEventListener('click', handleReset);
 
-  renderDisplay(time);
-  renderList(timers);
+  renderDisplay(state.time);
+  renderList(state.timers);
 };
 
 document.addEventListener('DOMContentLoaded', init);
