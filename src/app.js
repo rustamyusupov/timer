@@ -1,15 +1,38 @@
 const timers = [
-  { id: 1, name: 'Timer 1', time: 4 },
-  { id: 2, name: 'Timer 2', time: 2 },
-  { id: 3, name: 'Timer 3', time: 3 },
+  { id: 0, name: 'Timer 1', time: 4 },
+  { id: 1, name: 'Timer 2', time: 2 },
+  { id: 2, name: 'Timer 3', time: 3 },
 ];
 
-const handleToggle = () => {
-  console.log('toggle');
+let currentTimer = null;
+let intervalId = null;
+let isRunning = false;
+
+const startTimer = () => {
+  intervalId = setInterval(() => {}, 1000);
 };
 
-const handleReset = () => {
-  console.log('reset');
+const stopTimer = () => {
+  clearInterval(intervalId);
+};
+
+const handleToggle = () => {
+  const toggle = document.getElementById('toggle');
+
+  if (isRunning) {
+    toggle.innerHTML = 'Stop';
+  } else {
+    toggle.innerHTML = 'Start';
+  }
+
+  isRunning = !isRunning;
+};
+
+const handleReset = () => {};
+
+const renderDisplay = () => {
+  const display = document.getElementById('display');
+  display.innerHTML = formatTime(timers[currentTimer]?.time || 0);
 };
 
 const formatTime = time =>
@@ -38,6 +61,7 @@ const init = () => {
   toggle.addEventListener('click', handleToggle);
   reset.addEventListener('click', handleReset);
 
+  renderDisplay();
   renderList();
 };
 
