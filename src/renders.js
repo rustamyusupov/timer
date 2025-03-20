@@ -5,6 +5,11 @@ export const renderDisplay = time => {
   display.innerHTML = formatTime(time);
 };
 
+export const renderToggle = isRunning => {
+  const toggle = document.getElementById('toggle');
+  toggle.innerHTML = isRunning ? 'Stop' : 'Start';
+};
+
 export const renderList = timers => {
   const list = document.getElementById('list');
   list.innerHTML = timers

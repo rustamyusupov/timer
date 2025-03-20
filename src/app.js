@@ -1,17 +1,11 @@
-import { renderDisplay, renderList } from './renders';
-
-const timers = [
-  { id: 0, name: 'Timer 1', time: 4 },
-  { id: 1, name: 'Timer 2', time: 2 },
-  { id: 2, name: 'Timer 3', time: 3 },
-];
+import { renderDisplay, renderToggle, renderList } from './renders';
 
 const state = {
   currentTimer: null,
   intervalId: null,
   isRunning: false,
   time: 0,
-  timers,
+  timers: [],
 };
 
 const startTimer = () => {
@@ -23,9 +17,8 @@ const stopTimer = () => {
 };
 
 const handleToggle = () => {
-  const toggle = document.getElementById('toggle');
   state.isRunning = !state.isRunning;
-  toggle.innerHTML = state.isRunning ? 'Stop' : 'Start';
+  renderToggle(state.isRunning);
 };
 
 const handleReset = () => {};
@@ -37,6 +30,14 @@ const init = () => {
   toggle.addEventListener('click', handleToggle);
   reset.addEventListener('click', handleReset);
 
+  // TODO: load timers from local storage or url
+  state.timers = [
+    { id: 0, name: 'Timer 1', time: 4 },
+    { id: 1, name: 'Timer 2', time: 2 },
+    { id: 2, name: 'Timer 3', time: 3 },
+  ];
+
+  renderToggle(state.isRunning);
   renderDisplay(state.time);
   renderList(state.timers);
 };
