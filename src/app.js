@@ -1,3 +1,5 @@
+import { renderDisplay, renderList } from './renders';
+
 const timers = [
   { id: 0, name: 'Timer 1', time: 4 },
   { id: 1, name: 'Timer 2', time: 2 },
@@ -7,6 +9,7 @@ const timers = [
 let currentTimer = null;
 let intervalId = null;
 let isRunning = false;
+let time = 0;
 
 const startTimer = () => {
   intervalId = setInterval(() => {}, 1000);
@@ -18,41 +21,11 @@ const stopTimer = () => {
 
 const handleToggle = () => {
   const toggle = document.getElementById('toggle');
-
-  if (isRunning) {
-    toggle.innerHTML = 'Stop';
-  } else {
-    toggle.innerHTML = 'Start';
-  }
-
   isRunning = !isRunning;
+  toggle.innerHTML = isRunning ? 'Stop' : 'Start';
 };
 
 const handleReset = () => {};
-
-const renderDisplay = () => {
-  const display = document.getElementById('display');
-  display.innerHTML = formatTime(timers[currentTimer]?.time || 0);
-};
-
-const formatTime = time =>
-  `${Math.floor(time / 60)
-    .toString()
-    .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
-
-const renderList = () => {
-  const list = document.getElementById('list');
-
-  list.innerHTML = timers
-    .map(
-      timer =>
-        `<li class="item">` +
-        `<span class="text name">${timer.name}</span>` +
-        `<span class="text time">${formatTime(timer.time)}</span>` +
-        `</li>`
-    )
-    .join('');
-};
 
 const init = () => {
   const toggle = document.getElementById('toggle');
@@ -61,8 +34,8 @@ const init = () => {
   toggle.addEventListener('click', handleToggle);
   reset.addEventListener('click', handleReset);
 
-  renderDisplay();
-  renderList();
+  renderDisplay(time);
+  renderList(timers);
 };
 
 document.addEventListener('DOMContentLoaded', init);
