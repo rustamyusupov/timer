@@ -85,7 +85,7 @@ describe('Timer', () => {
     timer.setTimers(timers);
     timer.toggle(); // Start
 
-    vi.advanceTimersByTime(2000); // First timer completes
+    vi.advanceTimersByTime(3000); // First timer completes: 2, 1, 0 – 3 seconds
 
     const state = timer.getState();
     expect(state.timerIdx).toBe(1);
@@ -102,7 +102,7 @@ describe('Timer', () => {
     timer.setTimers(timers);
     timer.toggle(); // Start
 
-    vi.advanceTimersByTime(2000); // Both timers complete
+    vi.advanceTimersByTime(4000); // Both timers complete: 1, 0, 1, 0 – 4 seconds
 
     const state = timer.getState();
     expect(state.isRunning).toBe(false);

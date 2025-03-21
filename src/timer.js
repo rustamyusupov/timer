@@ -43,7 +43,7 @@ export const createTimer = () => {
         state.seconds -= 1;
         state.onUpdate(state);
 
-        if (state.seconds <= 0) {
+        if (state.seconds < 0) {
           actions.next();
         }
       }, 1000);
@@ -80,7 +80,3 @@ export const createTimer = () => {
 
   return actions;
 };
-
-// TODO:
-// - write tests for this module
-// - think about render 0 the timer when it reaches zero
