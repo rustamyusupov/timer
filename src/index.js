@@ -1,11 +1,11 @@
-import { initializeTimers } from './utils';
+import { initTimers, setToStorage } from './utils';
 import { createTimer } from './timer';
 import { render } from './render';
 
 const init = async () => {
   const toggle = document.getElementById('toggle');
   const reset = document.getElementById('reset');
-  const initialTimers = await initializeTimers();
+  const initialTimers = await initTimers();
   const timer = createTimer();
 
   toggle.addEventListener('click', timer.toggle);
@@ -13,6 +13,7 @@ const init = async () => {
 
   timer.setUpdate(render);
   timer.setTimers(initialTimers);
+  setToStorage('timers', initialTimers);
 };
 
 document.addEventListener('DOMContentLoaded', init);
