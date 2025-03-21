@@ -7,6 +7,7 @@ export const createTimer = (options = {}) => {
     timerIdx: 0,
     timers: options.timers || [],
     onComplete: options.onComplete || (() => {}),
+    onStart: options.onStart || (() => {}),
     onTick: options.onTick || (() => {}),
     onUpdate: options.onUpdate || (() => {}),
   };
@@ -33,6 +34,7 @@ export const createTimer = (options = {}) => {
     },
 
     next: () => {
+      // TODO: optimize smth like this: state.timers[state.timerIdx]
       state.timers[state.timerIdx].active = false;
       state.timerIdx += 1;
 
@@ -44,6 +46,7 @@ export const createTimer = (options = {}) => {
       state.seconds = state.timers[state.timerIdx].time;
       state.timers[state.timerIdx].active = true;
       state.onUpdate(state);
+      state.onStart(state.timers[state.timerIdx].name);
     },
 
     start: () => {
@@ -77,6 +80,11 @@ export const createTimer = (options = {}) => {
     },
 
     toggle: () => {
+      // TODO: optimize smth like this: state.timers[state.timerIdx]
+      if (!state.isRunning && !state.seconds) {
+        state.onStart(state.timers[state.timerIdx].name);
+      }
+
       state.isRunning = !state.isRunning;
 
       if (state.isRunning) {

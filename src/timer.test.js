@@ -127,4 +127,56 @@ describe('createTimer', () => {
     expect(timer.getState().timerIdx).toBe(0);
     expect(timer.getState().timers[0].active).toBe(false);
   });
+
+  it('should skip to next timer when calling next()', () => {
+    const timers = [
+      { time: 10, name: 'first', active: false },
+      { time: 5, name: 'second', active: false },
+    ];
+    const onStart = vi.fn();
+    timer = createTimer({ timers, onStart });
+
+    timer.toggle();
+    expect(timer.getState().timerIdx).toBe(0);
+
+    timer.next();
+
+    expect(timer.getState().timerIdx).toBe(1);
+    expect(timer.getState().seconds).toBe(5);
+    expect(timer.getState().timers[0].active).toBe(false);
+    expect(timer.getState().timers[1].active).toBe(true);
+    expect(onStart).toHaveBeenCalledWith('second');
+  });
+
+  it('should call onStart when timer starts', () => {
+    const onStart = vi.fn();
+    timer = createTimer({
+      timers: [{ time: 5, name: 'test timer', active: false }],
+      onStart,
+    });
+
+    timer.toggle();
+
+    expect(onStart).toHaveBeenCalledWith('test timer');
+  });
+
+  it('should handle stop and restart correctly', () => {
+    const timers = [{ time: 10, active: false }];
+    const onUpdate = vi.fn();
+    timer = createTimer({ timers, onUpdate });
+
+    timer.toggle();
+    vi.advanceTimersByTime(2000);
+    expect(timer.getState().seconds).toBe(8);
+
+    timer.stop();
+    expect(timer.getState().isRunning).toBe(true);
+
+    vi.advanceTimersByTime(3000);
+    expect(timer.getState().seconds).toBe(8);
+
+    timer.start();
+    vi.advanceTimersByTime(1000);
+    expect(timer.getState().seconds).toBe(7);
+  });
 });
