@@ -6,7 +6,7 @@ vi.mock('./utils', () => ({
   formatTime: vi.fn(seconds => `formatted:${seconds}`),
 }));
 
-describe('render function', () => {
+describe('render', () => {
   let elements;
 
   beforeEach(() => {
