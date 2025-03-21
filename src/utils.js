@@ -30,7 +30,7 @@ const request = async url => {
   }
 };
 
-export const loadTimers = async () => {
+export const initializeTimers = async () => {
   const params = new URLSearchParams(window.location.search);
   const url = params.get('url');
   const timers = (url ? await request(url) : getFromStorage('timers')) || [];
