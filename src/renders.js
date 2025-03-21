@@ -23,9 +23,9 @@ const renderList = items => {
     .join('');
 };
 
-export const render = ({ currentTime, isRunning, timers }) => {
+export const render = ({ seconds, isRunning, timers }) => {
   // TODO: render only the changed parts
-  renderDisplay(currentTime);
+  renderDisplay(seconds);
   renderToggle(isRunning);
   renderList(timers);
 };

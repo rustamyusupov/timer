@@ -1,49 +1,45 @@
 import { render } from './renders';
 
 const state = {
-  currentId: 0,
-  currentTime: 0,
   intervalId: null,
   isRunning: false,
+  seconds: 0,
+  timerIdx: 0,
   timers: [],
 };
 
 const stopTimer = () => clearInterval(state.intervalId);
 
 const resetTimer = () => {
-  stopTimer();
+  state.isRunning = false;
+  state.seconds = 0;
+  state.timerIdx = 0;
 
   state.timers.forEach(timer => {
     timer.active = false;
   });
 
-  state.isRunning = false;
-  state.currentTime = 0;
-  state.currentId = 0;
+  stopTimer();
 };
 
 const nextTimer = () => {
-  state.timers[state.currentId].active = false;
-  state.currentId += 1;
+  state.timers[state.timerIdx].active = false;
+  state.timerIdx += 1;
 
-  if (state.currentId === state.timers.length) {
+  if (state.timerIdx === state.timers.length) {
     resetTimer();
     return;
   }
 
-  state.currentTime = state.timers[state.currentId].time;
-  state.timers[state.currentId].active = true;
+  state.seconds = state.timers[state.timerIdx].time;
+  state.timers[state.timerIdx].active = true;
 };
 
 const startTimer = () => {
-  const startTime = Date.now();
-  const initialTime = state.currentTime;
-
   state.intervalId = setInterval(() => {
-    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-    state.currentTime = Math.max(initialTime - elapsedSeconds, 0);
+    state.seconds -= 1;
 
-    if (state.currentTime === 0) {
+    if (state.seconds === 0) {
       nextTimer();
     }
 
@@ -55,8 +51,8 @@ const handleToggle = () => {
   state.isRunning = !state.isRunning;
 
   if (state.isRunning) {
-    state.currentTime = state.currentTime || state.timers[state.currentId].time;
-    state.timers[state.currentId].active = true;
+    state.seconds = state.seconds || state.timers[state.timerIdx].time;
+    state.timers[state.timerIdx].active = true;
     startTimer();
   } else {
     stopTimer();
@@ -94,6 +90,3 @@ const init = () => {
 };
 
 document.addEventListener('DOMContentLoaded', init);
-
-// TODO: add visibility change event listener if needed for running in background
-// document.addEventListener('visibilitychange', () => {});
