@@ -1,24 +1,31 @@
 import { formatTime } from './utils';
 
-export const renderDisplay = time => {
+const renderDisplay = time => {
   const display = document.getElementById('display');
   display.innerHTML = formatTime(time);
 };
 
-export const renderToggle = isRunning => {
+const renderToggle = isActive => {
   const toggle = document.getElementById('toggle');
-  toggle.innerHTML = isRunning ? 'Stop' : 'Start';
+  toggle.innerHTML = isActive ? 'Stop' : 'Start';
 };
 
-export const renderList = timers => {
+const renderList = items => {
   const list = document.getElementById('list');
-  list.innerHTML = timers
+  list.innerHTML = items
     .map(
-      timer =>
-        `<li class="item">` +
-        `<span class="text name">${timer.name}</span>` +
-        `<span class="text time">${formatTime(timer.time)}</span>` +
+      item =>
+        `<li class="item${item.active ? ' active' : ''}">` +
+        `<span class="text name">${item.name}</span>` +
+        `<span class="text time">${formatTime(item.time)}</span>` +
         `</li>`
     )
     .join('');
+};
+
+export const render = ({ currentTime, isRunning, timers }) => {
+  // TODO: render only the changed parts
+  renderDisplay(currentTime);
+  renderToggle(isRunning);
+  renderList(timers);
 };
