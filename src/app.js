@@ -67,9 +67,6 @@ const handleReset = () => {
 };
 
 const init = () => {
-  const toggle = document.getElementById('toggle');
-  const reset = document.getElementById('reset');
-
   // TODO: load timers from local storage or url
   state.timers = [
     { id: 0, name: 'Timer 1', time: 4 },
@@ -77,11 +74,8 @@ const init = () => {
     { id: 2, name: 'Timer 3', time: 3 },
   ];
 
-  if (state.timers.length === 0) {
-    toggle.disabled = true;
-    reset.disabled = true;
-    return;
-  }
+  const toggle = document.getElementById('toggle');
+  const reset = document.getElementById('reset');
 
   toggle.addEventListener('click', handleToggle);
   reset.addEventListener('click', handleReset);

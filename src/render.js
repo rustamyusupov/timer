@@ -5,12 +5,14 @@ const formatTime = time =>
 
 export const render = state => {
   const display = document.getElementById('display');
+  const toggle = document.getElementById('toggle');
+  const reset = document.getElementById('reset');
+  const list = document.getElementById('list');
+
+  toggle.disabled = reset.disabled = state.timers.length === 0;
+  toggle.innerHTML = state.isRunning ? 'Stop' : 'Start';
   display.innerHTML = formatTime(state.seconds);
 
-  const toggle = document.getElementById('toggle');
-  toggle.innerHTML = state.isRunning ? 'Stop' : 'Start';
-
-  const list = document.getElementById('list');
   list.innerHTML = state.timers
     .map(
       item =>
