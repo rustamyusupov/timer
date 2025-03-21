@@ -1,5 +1,6 @@
 import { render } from './render';
 
+// TODO: incapsulate state and functions
 const state = {
   intervalId: null,
   isRunning: false,

@@ -1,9 +1,10 @@
 export default {
   base: '/timer',
   build: {
+    assetsDir: '',
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name].[hash].[ext]',
+        assetFileNames: '[name].[hash].[ext]',
       },
     },
   },
