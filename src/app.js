@@ -11,10 +11,15 @@ const state = {
 const stopTimer = () => clearInterval(state.intervalId);
 
 const resetTimer = () => {
+  stopTimer();
+
+  state.timers.forEach(timer => {
+    timer.active = false;
+  });
+
   state.isRunning = false;
   state.currentTime = 0;
   state.currentId = 0;
-  stopTimer();
 };
 
 const nextTimer = () => {
@@ -31,8 +36,12 @@ const nextTimer = () => {
 };
 
 const startTimer = () => {
+  const startTime = Date.now();
+  const initialTime = state.currentTime;
+
   state.intervalId = setInterval(() => {
-    state.currentTime -= 1;
+    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    state.currentTime = Math.max(initialTime - elapsedSeconds, 0);
 
     if (state.currentTime === 0) {
       nextTimer();
@@ -85,3 +94,6 @@ const init = () => {
 };
 
 document.addEventListener('DOMContentLoaded', init);
+
+// TODO: add visibility change event listener if needed for running in background
+// document.addEventListener('visibilitychange', () => {});
