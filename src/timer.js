@@ -1,13 +1,19 @@
-export const createTimer = () => {
+export const createTimer = (options = {}) => {
   const state = {
     intervalId: null,
     isRunning: false,
     lastTime: null,
     seconds: 0,
     timerIdx: 0,
-    timers: [],
-    onUpdate: () => {},
+    timers: options.timers || [],
+    onComplete: options.onComplete || (() => {}),
+    onTick: options.onTick || (() => {}),
+    onUpdate: options.onUpdate || (() => {}),
   };
+
+  if (state.onUpdate) {
+    state.onUpdate(state);
+  }
 
   const actions = {
     getState: () => ({ ...state }),
@@ -49,6 +55,11 @@ export const createTimer = () => {
         if (elapsed >= 1) {
           state.seconds -= elapsed;
           state.lastTime = Date.now();
+          state.onTick(state.seconds);
+
+          if (state.seconds === 0) {
+            state.onComplete();
+          }
 
           if (state.seconds < 0) {
             actions.next();
@@ -77,15 +88,6 @@ export const createTimer = () => {
       }
 
       state.onUpdate(state);
-    },
-
-    setTimers: timers => {
-      state.timers = timers;
-      state.onUpdate(state);
-    },
-
-    setUpdate: fn => {
-      state.onUpdate = fn;
     },
   };
 

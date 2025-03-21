@@ -1,129 +1,130 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createTimer } from './timer';
 
-describe('Timer', () => {
+describe('createTimer', () => {
   let timer;
-  let mockUpdateFn;
 
   beforeEach(() => {
     vi.useFakeTimers();
-
-    mockUpdateFn = vi.fn();
-    timer = createTimer();
-    timer.setUpdate(mockUpdateFn);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.useRealTimers();
+    vi.clearAllTimers();
   });
 
-  test('initial state is correct', () => {
-    const state = timer.getState();
+  it('should create a timer with default options', () => {
+    timer = createTimer();
 
-    expect(state.isRunning).toBe(false);
-    expect(state.seconds).toBe(0);
-    expect(state.timerIdx).toBe(0);
-    expect(state.timers).toEqual([]);
+    expect(timer.getState().isRunning).toBe(false);
+    expect(timer.getState().seconds).toBe(0);
+    expect(timer.getState().timers).toEqual([]);
   });
 
-  test('setTimers updates timers array', () => {
+  it('should initialize timer with provided timers', () => {
     const timers = [
-      { time: 10, active: false },
-      { time: 5, active: false },
+      { time: 30, active: false },
+      { time: 60, active: false },
     ];
-    timer.setTimers(timers);
+    timer = createTimer({ timers });
 
     expect(timer.getState().timers).toEqual(timers);
-    expect(mockUpdateFn).toHaveBeenCalledTimes(1); // setTimers
   });
 
-  test('toggle starts the timer when not running', () => {
-    const timers = [{ time: 10, active: false }];
-    timer.setTimers(timers);
+  it('should call onUpdate when initialized', () => {
+    const onUpdate = vi.fn();
+    timer = createTimer({ onUpdate });
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isRunning: false,
+        seconds: 0,
+      })
+    );
+  });
+
+  it('should call onComplete when timer reaches zero', () => {
+    const onComplete = vi.fn();
+    const onTick = vi.fn();
+    timer = createTimer({
+      timers: [{ time: 2, active: false }],
+      onComplete,
+      onTick,
+    });
+
     timer.toggle();
-
-    const state = timer.getState();
-    expect(state.isRunning).toBe(true);
-    expect(state.seconds).toBe(10);
-    expect(state.timers[0].active).toBe(true);
-    expect(mockUpdateFn).toHaveBeenCalledTimes(2); // setTimers, toggle
-  });
-
-  test('toggle stops the timer when running', () => {
-    const timers = [{ time: 10, active: false }];
-    timer.setTimers(timers);
-    timer.toggle(); // Start
-    timer.toggle(); // Stop
-
-    const state = timer.getState();
-    expect(state.isRunning).toBe(false);
-    expect(mockUpdateFn).toHaveBeenCalledTimes(4); // setTimers, toggle, stop, toggle
-  });
-
-  test('timer decrements seconds every second', () => {
-    const timers = [{ time: 3, active: false }];
-    timer.setTimers(timers);
-    timer.toggle(); // Start
-
-    expect(timer.getState().seconds).toBe(3);
-
-    vi.advanceTimersByTime(1000);
-    expect(timer.getState().seconds).toBe(2);
 
     vi.advanceTimersByTime(1000);
     expect(timer.getState().seconds).toBe(1);
+    expect(onTick).toHaveBeenCalledWith(1);
 
-    expect(mockUpdateFn).toHaveBeenCalledTimes(4); // setTimers, toggle, start * 2
+    vi.advanceTimersByTime(1000);
+    expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
-  test('next timer starts when current timer reaches zero', () => {
+  it('should move to next timer when current timer completes', () => {
     const timers = [
       { time: 2, active: false },
-      { time: 5, active: false },
+      { time: 3, active: false },
     ];
-    timer.setTimers(timers);
-    timer.toggle(); // Start
 
-    vi.advanceTimersByTime(3000); // First timer completes: 2, 1, 0 – 3 seconds
+    const onUpdate = vi.fn();
+    timer = createTimer({ timers, onUpdate });
 
-    const state = timer.getState();
-    expect(state.timerIdx).toBe(1);
-    expect(state.seconds).toBe(5);
-    expect(state.timers[0].active).toBe(false);
-    expect(state.timers[1].active).toBe(true);
+    timer.toggle();
+    expect(timer.getState().timerIdx).toBe(0);
+    expect(timer.getState().timers[0].active).toBe(true);
+
+    vi.advanceTimersByTime(3000);
+
+    expect(timer.getState().timerIdx).toBe(1);
+    expect(timer.getState().timers[0].active).toBe(false);
+    expect(timer.getState().timers[1].active).toBe(true);
+    expect(timer.getState().seconds).toBe(3);
   });
 
-  test('timer resets when all timers are complete', () => {
+  it('should reset when all timers complete', () => {
     const timers = [
       { time: 1, active: false },
       { time: 1, active: false },
     ];
-    timer.setTimers(timers);
-    timer.toggle(); // Start
 
-    vi.advanceTimersByTime(4000); // Both timers complete: 1, 0, 1, 0 – 4 seconds
+    const onUpdate = vi.fn();
+    timer = createTimer({ timers, onUpdate });
 
-    const state = timer.getState();
-    expect(state.isRunning).toBe(false);
-    expect(state.seconds).toBe(0);
-    expect(state.timerIdx).toBe(0);
-    expect(state.timers.every(t => !t.active)).toBe(true);
+    timer.toggle();
+    vi.advanceTimersByTime(4000); // 1, 0, 1, 0 – 4 seconds
+
+    expect(timer.getState().isRunning).toBe(false);
+    expect(timer.getState().seconds).toBe(0);
+    expect(timer.getState().timerIdx).toBe(0);
+    expect(timer.getState().timers.every(t => !t.active)).toBe(true);
   });
 
-  test('reset returns timer to initial state', () => {
-    const timers = [
-      { time: 10, active: false },
-      { time: 5, active: false },
-    ];
-    timer.setTimers(timers);
-    timer.toggle(); // Start
+  it('should toggle timer state correctly', () => {
+    timer = createTimer({
+      timers: [{ time: 5, active: false }],
+    });
+
+    timer.toggle();
+    expect(timer.getState().isRunning).toBe(true);
+
+    timer.toggle();
+    expect(timer.getState().isRunning).toBe(false);
+  });
+
+  it('should reset timer correctly', () => {
+    const timers = [{ time: 10, active: false }];
+    timer = createTimer({ timers });
+
+    timer.toggle();
+    vi.advanceTimersByTime(2000);
     timer.reset();
 
-    const state = timer.getState();
-    expect(state.isRunning).toBe(false);
-    expect(state.seconds).toBe(0);
-    expect(state.timerIdx).toBe(0);
-    expect(state.timers.every(t => !t.active)).toBe(true);
+    expect(timer.getState().isRunning).toBe(false);
+    expect(timer.getState().seconds).toBe(0);
+    expect(timer.getState().timerIdx).toBe(0);
+    expect(timer.getState().timers[0].active).toBe(false);
   });
 });
