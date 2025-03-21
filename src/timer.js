@@ -2,6 +2,7 @@ export const createTimer = () => {
   const state = {
     intervalId: null,
     isRunning: false,
+    lastTime: null,
     seconds: 0,
     timerIdx: 0,
     timers: [],
@@ -15,6 +16,7 @@ export const createTimer = () => {
       state.isRunning = false;
       state.seconds = 0;
       state.timerIdx = 0;
+      state.lastTime = null;
 
       state.timers.forEach(timer => {
         timer.active = false;
@@ -39,18 +41,27 @@ export const createTimer = () => {
     },
 
     start: () => {
-      state.intervalId = setInterval(() => {
-        state.seconds -= 1;
-        state.onUpdate(state);
+      state.lastTime = Date.now();
 
-        if (state.seconds < 0) {
-          actions.next();
+      state.intervalId = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - state.lastTime) / 1000);
+
+        if (elapsed >= 1) {
+          state.seconds -= elapsed;
+          state.lastTime = Date.now();
+
+          if (state.seconds < 0) {
+            actions.next();
+          } else {
+            state.onUpdate(state);
+          }
         }
-      }, 1000);
+      }, 100);
     },
 
     stop: () => {
       clearInterval(state.intervalId);
+      state.lastTime = null;
       state.onUpdate(state);
     },
 
