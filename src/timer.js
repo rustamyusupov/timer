@@ -19,36 +19,6 @@ export const createTimer = (options = {}) => {
   const actions = {
     getState: () => ({ ...state }),
 
-    reset: () => {
-      state.isRunning = false;
-      state.seconds = 0;
-      state.timerIdx = 0;
-      state.lastTime = null;
-
-      state.timers.forEach(timer => {
-        timer.active = false;
-      });
-
-      clearInterval(state.intervalId);
-      state.onUpdate(state);
-    },
-
-    next: () => {
-      // TODO: optimize smth like this: state.timers[state.timerIdx]
-      state.timers[state.timerIdx].active = false;
-      state.timerIdx += 1;
-
-      if (state.timerIdx >= state.timers.length) {
-        actions.reset();
-        return;
-      }
-
-      state.seconds = state.timers[state.timerIdx].time;
-      state.timers[state.timerIdx].active = true;
-      state.onUpdate(state);
-      state.onStart(state.timers[state.timerIdx].name);
-    },
-
     start: () => {
       state.lastTime = Date.now();
 
@@ -80,21 +50,55 @@ export const createTimer = (options = {}) => {
     },
 
     toggle: () => {
-      // TODO: optimize smth like this: state.timers[state.timerIdx]
+      const current = state.timers[state.timerIdx];
+
       if (!state.isRunning && !state.seconds) {
-        state.onStart(state.timers[state.timerIdx].name);
+        state.onStart(current.name);
       }
 
       state.isRunning = !state.isRunning;
 
       if (state.isRunning) {
-        state.seconds = state.seconds || state.timers[state.timerIdx].time;
-        state.timers[state.timerIdx].active = true;
+        state.seconds = state.seconds || current.time;
+        current.active = true;
+
         actions.start();
       } else {
         actions.stop();
       }
 
+      state.onUpdate(state);
+    },
+
+    next: () => {
+      const current = state.timers[state.timerIdx];
+      current.active = false;
+      state.timerIdx += 1;
+
+      if (state.timerIdx >= state.timers.length) {
+        actions.reset();
+        return;
+      }
+
+      const next = state.timers[state.timerIdx];
+      state.seconds = next.time;
+      next.active = true;
+
+      state.onUpdate(state);
+      state.onStart(next.name);
+    },
+
+    reset: () => {
+      state.isRunning = false;
+      state.seconds = 0;
+      state.timerIdx = 0;
+      state.lastTime = null;
+
+      state.timers.forEach(timer => {
+        timer.active = false;
+      });
+
+      clearInterval(state.intervalId);
       state.onUpdate(state);
     },
   };
