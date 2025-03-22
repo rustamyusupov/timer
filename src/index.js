@@ -1,7 +1,7 @@
 import { initTimers, setToStorage } from './utils';
+import { beep, speak, enableAudio } from './sound';
 import { createTimer } from './timer';
 import { render } from './render';
-import { beep } from './audio';
 
 const init = async () => {
   const toggle = document.getElementById('toggle');
@@ -12,13 +12,14 @@ const init = async () => {
     timers,
     onComplete: beep,
     onUpdate: render,
-    onStart: n => console.log('voice', n), // TODO: voice
+    onStart: speak,
     onTick: s => s <= 3 && s > 0 && beep(100),
   });
 
   toggle.addEventListener('click', timer.toggle);
   reset.addEventListener('click', timer.reset);
 
+  enableAudio();
   setToStorage('timers', timers);
 };
 

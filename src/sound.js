@@ -22,3 +22,27 @@ export const beep = async (duration = 500, volume = 1) =>
       resolve();
     };
   });
+
+export const speak = text => {
+  const speech = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(speech);
+};
+
+export const enableAudio = () => {
+  const isiOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+  if (!isiOS) {
+    return;
+  }
+
+  const simulateAudio = () => {
+    const lecture = new SpeechSynthesisUtterance('hello');
+
+    lecture.volume = 0;
+    speechSynthesis.speak(lecture);
+
+    document.removeEventListener('click', simulateAudio);
+  };
+
+  document.addEventListener('click', simulateAudio);
+};
