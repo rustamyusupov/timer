@@ -23,22 +23,25 @@ export const createTimer = (options = {}) => {
       state.lastTime = Date.now();
 
       state.intervalId = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - state.lastTime) / 1000);
+        const now = Date.now();
+        const elapsed = Math.floor((now - state.lastTime) / 1000);
 
-        if (elapsed >= 1) {
-          state.seconds -= elapsed;
-          state.lastTime = Date.now();
-          state.onTick(state.seconds);
+        if (elapsed < 1) {
+          return;
+        }
 
-          if (state.seconds === 0) {
-            state.onComplete();
-          }
+        state.seconds -= elapsed;
+        state.lastTime = now;
+        state.onTick(state.seconds);
 
-          if (state.seconds < 0) {
-            actions.next();
-          } else {
-            state.onUpdate(state);
-          }
+        if (state.seconds === 0) {
+          state.onComplete();
+        }
+
+        if (state.seconds < 0) {
+          actions.next();
+        } else {
+          state.onUpdate(state);
         }
       }, 100);
     },
