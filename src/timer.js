@@ -6,10 +6,11 @@ export const createTimer = (options = {}) => {
     seconds: 0,
     timerIdx: 0,
     timers: options.timers || [],
-    onComplete: options.onComplete || (() => {}),
-    onStart: options.onStart || (() => {}),
+    onEnd: options.onEnd || (() => {}),
     onTick: options.onTick || (() => {}),
+    onStart: options.onStart || (() => {}),
     onUpdate: options.onUpdate || (() => {}),
+    onComplete: options.onComplete || (() => {}),
   };
 
   if (state.onUpdate) {
@@ -35,7 +36,7 @@ export const createTimer = (options = {}) => {
         state.onTick(state.seconds);
 
         if (state.seconds === 0) {
-          state.onComplete();
+          state.onEnd();
         }
 
         if (state.seconds < 0) {
@@ -103,6 +104,7 @@ export const createTimer = (options = {}) => {
 
       clearInterval(state.intervalId);
       state.onUpdate(state);
+      state.onComplete();
     },
   };
 

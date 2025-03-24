@@ -44,25 +44,6 @@ describe('createTimer', () => {
     );
   });
 
-  it('should call onComplete when timer reaches zero', () => {
-    const onComplete = vi.fn();
-    const onTick = vi.fn();
-    timer = createTimer({
-      timers: [{ time: 2, active: false }],
-      onComplete,
-      onTick,
-    });
-
-    timer.toggle();
-
-    vi.advanceTimersByTime(1000);
-    expect(timer.getState().seconds).toBe(1);
-    expect(onTick).toHaveBeenCalledWith(1);
-
-    vi.advanceTimersByTime(1000);
-    expect(onComplete).toHaveBeenCalledTimes(1);
-  });
-
   it('should move to next timer when current timer completes', () => {
     const timers = [
       { time: 2, active: false },
@@ -178,5 +159,58 @@ describe('createTimer', () => {
     timer.start();
     vi.advanceTimersByTime(1000);
     expect(timer.getState().seconds).toBe(7);
+  });
+
+  it('should call onTick when timer is running', () => {
+    const onTick = vi.fn();
+    timer = createTimer({
+      timers: [{ time: 10, active: false }],
+      onTick,
+    });
+
+    timer.toggle();
+    vi.advanceTimersByTime(1000);
+
+    expect(onTick).toHaveBeenCalledWith(9);
+  });
+
+  it('should call onEnd when timer reaches zero', () => {
+    const onEnd = vi.fn();
+    timer = createTimer({
+      timers: [{ time: 2, active: false }],
+      onEnd,
+    });
+
+    timer.toggle();
+    vi.advanceTimersByTime(2000);
+
+    expect(onEnd).toHaveBeenCalled();
+  });
+
+  it('should call onComplete when all timers finish', () => {
+    const onComplete = vi.fn();
+    timer = createTimer({
+      timers: [{ time: 1, active: false }],
+      onComplete,
+    });
+
+    timer.toggle();
+    vi.advanceTimersByTime(2000);
+
+    expect(onComplete).toHaveBeenCalled();
+  });
+
+  it('should handle rapid time advancement correctly', () => {
+    const timers = [
+      { time: 5, active: false },
+      { time: 5, active: false },
+    ];
+    timer = createTimer({ timers });
+
+    timer.toggle();
+    vi.advanceTimersByTime(7000);
+
+    expect(timer.getState().timerIdx).toBe(1);
+    expect(timer.getState().seconds).toBe(4);
   });
 });
