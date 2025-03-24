@@ -39,3 +39,8 @@ export const formatTime = time =>
     .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
 
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+export const compose =
+  (...fns) =>
+  (...args) =>
+    fns.forEach(fn => fn(...args));
