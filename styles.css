@@ -70,3 +70,9 @@
 .text.name {
   margin-right: auto;
 }
+
+.version {
+  color: lightgray;
+  margin-top: auto;
+  align-self: flex-end;
+}
