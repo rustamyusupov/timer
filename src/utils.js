@@ -1,19 +1,4 @@
-import { secondsInMinute } from './constants';
-
-export const timeToSeconds = time => {
-  const [minutes, seconds] = time.split(':').map(Number);
-
-  return minutes * secondsInMinute + seconds;
-};
-
-export const secondsToTime = seconds => {
-  const minutes = String(Math.floor(seconds / secondsInMinute)).padStart(2, '0');
-  const remaining = String(seconds % secondsInMinute).padStart(2, '0');
-
-  return `${minutes}:${remaining}`;
-};
-
-export const request = async url => {
+const request = async url => {
   try {
     const response = await fetch(url);
 
@@ -31,11 +16,31 @@ export const request = async url => {
   }
 };
 
-export const loadTimers = async () => {
-  const params = new URLSearchParams(window.location.search);
-  const url = params.get('url');
-
-  return url ? await request(url) : JSON.parse(localStorage.getItem('timers')) || [];
+const getFromStorage = key => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
 };
 
+export const setToStorage = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+export const initTimers = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const url = params.get('url');
+  const timers = url ? await request(url) : getFromStorage('timers');
+
+  return timers || [];
+};
+
+export const formatTime = time =>
+  `${Math.floor(time / 60)
+    .toString()
+    .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
+
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+export const compose =
+  (...fns) =>
+  (...args) =>
+    fns.forEach(fn => fn(...args));

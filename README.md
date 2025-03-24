@@ -4,12 +4,11 @@
 
 ## Description
 
-This is a simple timer application that allows users to create, manage, and run multiple timers.
+This is a simple timer application that allows users to run multiple timers.
 This application is optimized for use on iOS Safari, ensuring the best performance and user experience on Apple devices.
 
 ## Features
 
-- Add new timers with a name and duration.
 - Start, pause, and reset timers.
 - Audio feedback for timer events.
 - Persistent storage of timers using local storage.

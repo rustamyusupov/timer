@@ -6,24 +6,18 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Timer</title>
-    <link rel="stylesheet" href="/src/styles.css" />
-    <script src="/nosleep.min.js"></script>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
-  <body class="root">
-    <div class="timer" id="timer"></div>
-    <form class="form hidden" id="form" method="dialog">
-      <input class="field name" id="name" type="text" name="name" placeholder="Name" required />
-      <input class="field time" type="time" name="time" value="01:00" required />
-      <button class="button save" type="submit">Save</button>
-    </form>
-    <div class="actions">
-      <button class="button" id="add" type="button">Add</button>
-      <button class="button hidden" id="reset" type="button">Reset</button>
-      <button class="button hidden" id="start" type="button">Start</button>
-      <button class="button hidden" id="pause" type="button">Pause</button>
+  <body>
+    <div class="container">
+      <div id="display" class="display">00:00</div>
+      <div class="controls">
+        <button id="reset" class="button">Reset</button>
+        <button id="toggle" class="button">Start</button>
+      </div>
+      <ul id="list" class="list"></ul>
+      <p id="version" class="version"></p>
     </div>
-    <ul class="list" id="list"></ul>
-    <p class="version" id="version"></p>
-    <script type="module" src="/src/index.js"></script>
+    <script type="module" src="src/index.js"></script>
   </body>
 </html>

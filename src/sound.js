@@ -1,4 +1,3 @@
-import { millisecondsInSecond } from './constants';
 import { delay } from './utils';
 
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -16,7 +15,7 @@ export const beep = async (duration = 500, volume = 1) =>
     oscillator.type = 'sine';
 
     oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + duration / millisecondsInSecond);
+    oscillator.stop(ctx.currentTime + duration / 1000);
 
     oscillator.onended = async () => {
       await delay(500);
@@ -26,7 +25,6 @@ export const beep = async (duration = 500, volume = 1) =>
 
 export const speak = text => {
   const speech = new SpeechSynthesisUtterance(text);
-
   window.speechSynthesis.speak(speech);
 };
 
@@ -47,4 +45,17 @@ export const enableAudio = () => {
   };
 
   document.addEventListener('click', simulateAudio);
+};
+
+export const preventSleep = () => {
+  const silent = new Audio();
+
+  silent.src =
+    'data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTguMTYuMTAyAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+  silent.loop = true;
+
+  return {
+    start: () => silent.play(),
+    stop: () => silent.pause(),
+  };
 };

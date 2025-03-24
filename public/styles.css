@@ -12,11 +12,7 @@
   padding: 0;
 }
 
-ul {
-  list-style-type: none;
-}
-
-.root {
+.container {
   --gap: 8px;
 
   display: flex;
@@ -27,25 +23,30 @@ ul {
   padding: 16px;
 }
 
-.timer,
-.semicolon {
+.display {
   display: flex;
   font-size: 70px;
   font-variant-numeric: tabular-nums;
   justify-content: center;
   line-height: 70px;
-}
-
-.timer {
   margin-bottom: 20px;
 }
 
-.semicolon {
-  display: inline-block;
-  transform: translateY(-9%);
+.controls {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+.button {
+  font-size: 24px;
+  height: 50px;
+  padding: 8px;
+  width: 100%;
 }
 
 .list {
+  list-style-type: none;
   margin-top: 20px;
 }
 
@@ -59,15 +60,7 @@ ul {
 }
 
 .active {
-  color: #007aff; /* -apple-system blue */
-}
-
-.remove {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
+  color: #007aff;
 }
 
 .text {
@@ -76,48 +69,6 @@ ul {
 
 .text.name {
   margin-right: auto;
-}
-
-.form {
-  align-items: flex-end;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.hidden {
-  display: none;
-}
-
-.button,
-.field {
-  font-size: 24px;
-  height: 50px;
-  padding: 8px;
-}
-
-.field.name {
-  width: 100%;
-}
-
-field.time {
-  width: 130px;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--gap);
-}
-
-.button {
-  width: 100%;
-}
-
-.save {
-  flex: 1;
 }
 
 .version {
