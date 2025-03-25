@@ -6,6 +6,7 @@ export const createTimer = (options = {}) => {
     seconds: 0,
     timerIdx: 0,
     timers: options.timers || [],
+    onRun: options.onRun || (() => {}),
     onEnd: options.onEnd || (() => {}),
     onTick: options.onTick || (() => {}),
     onStart: options.onStart || (() => {}),
@@ -57,6 +58,7 @@ export const createTimer = (options = {}) => {
       const current = state.timers[state.timerIdx];
 
       if (!state.isRunning && !state.seconds) {
+        state.onRun();
         state.onStart(current.name);
       }
 

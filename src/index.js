@@ -14,6 +14,7 @@ const init = async () => {
     onEnd: beep,
     onStart: speak,
     onUpdate: render,
+    onRun: () => beep(0, 0),
     onComplete: sleepPreventer.stop,
     onTick: s => s <= 3 && s > 0 && beep(100),
   });
@@ -29,4 +30,4 @@ const init = async () => {
 
 document.addEventListener('DOMContentLoaded', init);
 
-// TODO: beep doesn't work on mobile
+// TODO: think about separate start/stop button
