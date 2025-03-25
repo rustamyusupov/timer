@@ -29,6 +29,4 @@ const init = async () => {
 
 document.addEventListener('DOMContentLoaded', init);
 
-// TODO:
-// - sleep preventer doesn't work on mobile
-// - beep doesn't work on mobile
+// TODO: beep doesn't work on mobile
