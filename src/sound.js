@@ -46,13 +46,3 @@ export const enableAudio = () => {
 
   document.addEventListener('click', simulateAudio);
 };
-
-export const preventSleep = () => {
-  // TODO: implement own solution
-  const noSleep = new NoSleep();
-
-  return {
-    start: () => noSleep.enable(),
-    stop: () => noSleep.disable(),
-  };
-};
