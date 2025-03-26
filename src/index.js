@@ -1,13 +1,22 @@
-import { initTimers, compose, setToStorage } from './utils';
+import { compose, getFromStorage, request, setToStorage } from './utils';
 import { beep, speak, enableAudio } from './sound';
 import { createWakeLock } from './wakelock';
 import { createTimer } from './timer';
 import { render } from './render';
 
+export const loadTimers = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const url = params.get('url');
+  const timers = url ? await request(url) : getFromStorage('timers');
+
+  return timers || [];
+};
+
 const init = async () => {
   const toggle = document.getElementById('toggle');
   const reset = document.getElementById('reset');
-  const timers = await initTimers();
+
+  const timers = await loadTimers();
   const lock = createWakeLock();
 
   const timer = createTimer({
