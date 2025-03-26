@@ -22,11 +22,11 @@ const init = async () => {
   const timer = createTimer({
     timers,
     onEnd: beep,
-    onStart: speak,
-    onUpdate: render,
     onRun: () => beep(0, 0),
-    onComplete: lock.disable,
-    onTick: s => s <= 3 && s > 0 && beep(100),
+    onStart: name => speak(name),
+    onUpdate: state => render(state),
+    onComplete: () => lock.disable(),
+    onTick: sec => sec <= 3 && sec > 0 && beep(100),
   });
 
   const togglePreventer = () => lock?.[timer.getState().isRunning ? 'enable' : 'disable']();
