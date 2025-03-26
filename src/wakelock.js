@@ -27,3 +27,6 @@ export const createWakeLock = () => {
 
   return { enable, disable };
 };
+
+// TODO: to rewrite when the wake lock api is fixed
+// for home screen web app https://bugs.webkit.org/show_bug.cgi?id=254545
