@@ -30,5 +30,3 @@ const init = async () => {
 };
 
 document.addEventListener('DOMContentLoaded', init);
-
-// TODO: think about separate start/stop button
