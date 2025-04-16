@@ -1,5 +1,4 @@
 export default {
-  base: '/timer',
   build: {
     assetsDir: '',
     rollupOptions: {
