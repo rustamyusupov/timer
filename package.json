@@ -5,12 +5,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "deploy": "vite build && gh-pages -d dist",
     "test": "vitest"
   },
   "description": "",
   "devDependencies": {
-    "gh-pages": "6.3.0",
     "vite": "6.2.2",
     "vitest": "3.0.9"
   }
