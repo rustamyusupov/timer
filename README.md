@@ -16,4 +16,4 @@ This application is optimized for use on iOS Safari, ensuring the best performan
 
 ## Example
 
-You can see an example of the timer application in action [here](https://rustamyusupov.github.io/timer/?url=https://raw.githubusercontent.com/rustamyusupov/timer/refs/heads/main/example.json). This example uses a URL to load intervals from a remote JSON file.
+You can see an example of the timer application in action [timer.rstm.me](https://timer.rstm.me?url=https://raw.githubusercontent.com/rustamyusupov/timer/refs/heads/main/yoga.json). This example uses a URL to load intervals from a remote JSON file.
