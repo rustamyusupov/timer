@@ -35,7 +35,7 @@ const init = async () => {
   const togglePreventer = () => lock?.[timer.getState().isRunning ? 'enable' : 'disable']();
 
   toggle.addEventListener('click', compose(timer.toggle, togglePreventer));
-  reset.addEventListener('click', timer.reset);
+  reset.addEventListener('click', compose(timer.reset, lock.disable));
 
   enableAudio();
   setToStorage('timers', timers);
