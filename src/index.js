@@ -25,8 +25,11 @@ const init = async () => {
     onRun: () => beep(0, 0),
     onStart: name => speak(name),
     onUpdate: state => render(state),
-    onComplete: () => speak('Workout complete!') && lock.disable(),
     onTick: sec => sec <= 3 && sec > 0 && beep(100),
+    onComplete: () => {
+      speak('Workout complete!');
+      lock.disable();
+    },
   });
 
   const togglePreventer = () => lock?.[timer.getState().isRunning ? 'enable' : 'disable']();
