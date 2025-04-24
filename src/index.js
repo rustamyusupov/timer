@@ -25,7 +25,7 @@ const init = async () => {
     onRun: () => beep(0, 0),
     onStart: name => speak(name),
     onUpdate: state => render(state),
-    onComplete: () => lock.disable(),
+    onComplete: () => speak('Workout complete!') && lock.disable(),
     onTick: sec => sec <= 3 && sec > 0 && beep(100),
   });
 

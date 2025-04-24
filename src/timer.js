@@ -82,7 +82,7 @@ export const createTimer = (options = {}) => {
       state.timerIdx += 1;
 
       if (state.timerIdx >= state.timers.length) {
-        actions.reset();
+        actions.finish();
         return;
       }
 
@@ -106,6 +106,10 @@ export const createTimer = (options = {}) => {
 
       clearInterval(state.intervalId);
       state.onUpdate(state);
+    },
+
+    finish: () => {
+      actions.reset();
       state.onComplete();
     },
   };
