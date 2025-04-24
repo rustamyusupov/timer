@@ -1,6 +1,6 @@
 {
   "name": "timer",
-  "version": "1.14.0",
+  "version": "1.14.1",
   "author": "Rustam Yusupov",
   "scripts": {
     "dev": "vite --host",
