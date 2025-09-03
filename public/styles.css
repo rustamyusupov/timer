@@ -71,6 +71,10 @@
   margin-right: auto;
 }
 
+.text.time {
+  font-variant-numeric: tabular-nums;
+}
+
 .version {
   color: lightgray;
   margin-top: auto;
