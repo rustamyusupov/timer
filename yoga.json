@@ -1,62 +1,20 @@
 [
-  {
-    "id": 0,
-    "name": "Single-leg Stretch",
-    "time": 60
-  },
-  {
-    "id": 1,
-    "name": "Single-leg Stretch",
-    "time": 60
-  },
-  {
-    "id": 2,
-    "name": "Double-leg Stretch",
-    "time": 60
-  },
-  {
-    "id": 3,
-    "name": "Reclined Hand to Foot",
-    "time": 60
-  },
-  {
-    "id": 4,
-    "name": "Reclined Hand to Foot",
-    "time": 60
-  },
-  {
-    "id": 5,
-    "name": "Supine Spinal Twist",
-    "time": 60
-  },
-  {
-    "id": 6,
-    "name": "Supine Spinal Twist",
-    "time": 60
-  },
-  {
-    "id": 7,
-    "name": "Bridge with Glute Lower Lift",
-    "time": 60
-  },
-  {
-    "id": 8,
-    "name": "Locust",
-    "time": 60
-  },
-  {
-    "id": 9,
-    "name": "Cat Cow",
-    "time": 90
-  },
-  {
-    "id": 10,
-    "name": "Sphinx",
-    "time": 180
-  },
-  {
-    "id": 11,
-    "name": "Child’s Pose",
-    "time": 180
-  }
+  { "id": 0, "name": "Single-leg Stretch Left", "time": 60 },
+  { "id": 1, "name": "Single-leg Stretch Right", "time": 60 },
+  { "id": 2, "name": "Double-leg Stretch", "time": 60 },
+  { "id": 3, "name": "Figure-4 Glute Stretch Left", "time": 60 },
+  { "id": 4, "name": "Figure-4 Glute Stretch Right", "time": 60 },
+  { "id": 5, "name": "Reclined Hand-to-Big-Toe Pose Left", "time": 60 },
+  { "id": 6, "name": "Reclined Hand-to-Big-Toe Pose Right", "time": 60 },
+  { "id": 7, "name": "Supine Spinal Twist Left", "time": 60 },
+  { "id": 8, "name": "Supine Spinal Twist Right", "time": 60 },
+  { "id": 9, "name": "Open Book Thoracic Rotation Left", "time": 60 },
+  { "id": 10, "name": "Open Book Thoracic Rotation Right", "time": 60 },
+  { "id": 11, "name": "Bridge Pose with Glute Activation", "time": 60 },
+  { "id": 12, "name": "Locust Pose", "time": 60 },
+  { "id": 13, "name": "Cat-Cow", "time": 90 },
+  { "id": 14, "name": "Half-kneeling Hip Flexor Stretch Left", "time": 60 },
+  { "id": 15, "name": "Half-kneeling Hip Flexor Stretch Right", "time": 60 },
+  { "id": 16, "name": "Sphinx Pose", "time": 180 },
+  { "id": 17, "name": "Child’s Pose", "time": 180 }
 ]
