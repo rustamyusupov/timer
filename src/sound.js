@@ -2,8 +2,17 @@ import { delay } from './utils';
 
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-export const beep = async (duration = 500, volume = 1) =>
-  new Promise(resolve => {
+// 4 samples of 8-bit silence: playing it through an <audio> element moves the
+// iOS audio session to "playback", so the mute switch no longer silences Web Audio
+const SILENCE =
+  'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAACAgICA';
+
+export const beep = async (duration = 500, volume = 1) => {
+  if (ctx.state === 'suspended') {
+    await ctx.resume();
+  }
+
+  return new Promise(resolve => {
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
@@ -22,6 +31,7 @@ export const beep = async (duration = 500, volume = 1) =>
       resolve();
     };
   });
+};
 
 export const speak = text => {
   const speech = new SpeechSynthesisUtterance(text);
@@ -36,6 +46,9 @@ export const enableAudio = () => {
   }
 
   const simulateAudio = () => {
+    new Audio(SILENCE).play().catch(() => {});
+    ctx.resume().catch(() => {});
+
     const lecture = new SpeechSynthesisUtterance('hello');
 
     lecture.volume = 0;
