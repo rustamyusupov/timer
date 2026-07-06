@@ -11,15 +11,15 @@ const toLocalISO = timestamp => {
   return new Date(timestamp - offset).toISOString().slice(0, 19);
 };
 
-export const buildActivity = ({ startedAt, elapsed, timers }) => ({
-  name: 'Yoga',
-  sport_type: 'Yoga',
+export const buildActivity = ({ name, sport, startedAt, elapsed, timers }) => ({
+  name,
+  sport_type: sport,
   start_date_local: toLocalISO(startedAt),
   elapsed_time: elapsed,
   description: timers.map(timer => `${timer.name} — ${formatTime(timer.time)}`).join('\n'),
 });
 
-export const createStrava = () => {
+export const createStrava = (workout = {}) => {
   const getConfig = () => getFromStorage(STORAGE_KEY) || {};
   const setConfig = data => setToStorage(STORAGE_KEY, { ...getConfig(), ...data });
 
@@ -99,7 +99,7 @@ export const createStrava = () => {
     const response = await fetch(`${PROXY_URL}/api/v3/activities`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
-      body: new URLSearchParams(buildActivity(summary)),
+      body: new URLSearchParams(buildActivity({ ...workout, ...summary })),
     });
 
     // 409 means Strava already has this activity, e.g. a retry after

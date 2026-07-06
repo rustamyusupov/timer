@@ -3,6 +3,8 @@ import { buildActivity, createStrava } from './strava';
 
 describe('buildActivity', () => {
   const summary = {
+    name: 'Yoga',
+    sport: 'Yoga',
     startedAt: new Date('2026-07-06T10:00:00').getTime(),
     elapsed: 150,
     timers: [
@@ -28,6 +30,7 @@ describe('buildActivity', () => {
 });
 
 describe('upload', () => {
+  const workout = { name: 'Test workout', sport: 'Workout' };
   const summary = {
     startedAt: new Date('2026-07-06T10:00:00').getTime(),
     elapsed: 15,
@@ -55,24 +58,24 @@ describe('upload', () => {
   it('resolves when the response body is empty', async () => {
     stubFetch({ ok: true, status: 201, text: async () => '' });
 
-    await expect(createStrava().upload(summary)).resolves.toBeNull();
+    await expect(createStrava(workout).upload(summary)).resolves.toBeNull();
   });
 
   it('returns the parsed activity when the response has a body', async () => {
     stubFetch({ ok: true, status: 201, text: async () => '{"id":42}' });
 
-    await expect(createStrava().upload(summary)).resolves.toEqual({ id: 42 });
+    await expect(createStrava(workout).upload(summary)).resolves.toEqual({ id: 42 });
   });
 
   it('treats 409 duplicate as success', async () => {
     stubFetch({ ok: false, status: 409, text: async () => '' });
 
-    await expect(createStrava().upload(summary)).resolves.toBeNull();
+    await expect(createStrava(workout).upload(summary)).resolves.toBeNull();
   });
 
   it('throws on other error statuses', async () => {
     stubFetch({ ok: false, status: 500, text: async () => '' });
 
-    await expect(createStrava().upload(summary)).rejects.toThrow('500');
+    await expect(createStrava(workout).upload(summary)).rejects.toThrow('500');
   });
 });

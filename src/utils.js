@@ -16,6 +16,20 @@ export const request = async url => {
   }
 };
 
+export const normalizeWorkout = data => {
+  const workout = Array.isArray(data) ? { timers: data } : data || {};
+
+  return { name: 'Workout', sport: 'Workout', timers: [], ...workout };
+};
+
+export const loadWorkout = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const url = params.get('url');
+  const data = url ? await request(url) : getFromStorage('timers');
+
+  return normalizeWorkout(data);
+};
+
 export const getFromStorage = key => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
