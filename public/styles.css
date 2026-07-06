@@ -21,6 +21,7 @@
   min-height: 100dvh;
   min-width: 320px;
   padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 
 .display {
@@ -80,6 +81,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: auto;
+  padding-top: 20px;
 }
 
 .strava {
