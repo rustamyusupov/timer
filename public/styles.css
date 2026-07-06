@@ -75,8 +75,21 @@
   font-variant-numeric: tabular-nums;
 }
 
+.footer {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.strava {
+  background: none;
+  border: none;
+  color: #fc4c02;
+  cursor: pointer;
+  padding: 0;
+}
+
 .version {
   color: lightgray;
-  margin-top: auto;
-  align-self: flex-end;
 }

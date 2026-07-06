@@ -200,6 +200,31 @@ describe('createTimer', () => {
     expect(onComplete).toHaveBeenCalled();
   });
 
+  it('should pass workout summary to onComplete', () => {
+    vi.setSystemTime(new Date('2026-07-06T10:00:00'));
+
+    const onComplete = vi.fn();
+    timer = createTimer({
+      timers: [
+        { time: 1, name: 'first', active: false },
+        { time: 1, name: 'second', active: false },
+      ],
+      onComplete,
+    });
+
+    timer.toggle();
+    vi.advanceTimersByTime(4000);
+
+    expect(onComplete).toHaveBeenCalledWith({
+      startedAt: new Date('2026-07-06T10:00:00').getTime(),
+      elapsed: 4,
+      timers: [
+        { time: 1, name: 'first' },
+        { time: 1, name: 'second' },
+      ],
+    });
+  });
+
   it('should handle rapid time advancement correctly', () => {
     const timers = [
       { time: 5, active: false },

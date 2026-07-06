@@ -12,5 +12,12 @@ export default {
   },
   server: {
     port: 3000,
+    proxy: {
+      '/strava': {
+        target: 'https://www.strava.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/strava/, ''),
+      },
+    },
   },
 };

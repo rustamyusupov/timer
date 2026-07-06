@@ -13,6 +13,7 @@ This application is optimized for use on iOS Safari, ensuring the best performan
 - Audio feedback for timer events.
 - Persistent storage of timers using local storage.
 - Support for loading timers from a remote JSON file.
+- Upload completed workouts to Strava as manual activities.
 
 ## Example
 

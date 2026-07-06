@@ -15,11 +15,13 @@ describe('render', () => {
       toggle: { innerHTML: '', disabled: false },
       reset: { disabled: false },
       list: { innerHTML: '' },
+      version: { textContent: '' },
     };
 
     global.document = {
       getElementById: id => elements[id],
     };
+    global.__APP_VERSION__ = '0.0.0';
   });
 
   it('should render the correct time in the display', () => {

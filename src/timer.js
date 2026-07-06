@@ -3,6 +3,7 @@ export const createTimer = (options = {}) => {
     intervalId: null,
     isRunning: false,
     lastTime: null,
+    startedAt: null,
     seconds: 0,
     timerIdx: 0,
     timers: options.timers || [],
@@ -58,6 +59,7 @@ export const createTimer = (options = {}) => {
       const current = state.timers[state.timerIdx];
 
       if (!state.isRunning && !state.seconds) {
+        state.startedAt = Date.now();
         state.onRun();
         state.onStart(current.name);
       }
@@ -99,6 +101,7 @@ export const createTimer = (options = {}) => {
       state.seconds = 0;
       state.timerIdx = 0;
       state.lastTime = null;
+      state.startedAt = null;
 
       state.timers.forEach(timer => {
         timer.active = false;
@@ -109,8 +112,14 @@ export const createTimer = (options = {}) => {
     },
 
     finish: () => {
+      const summary = {
+        startedAt: state.startedAt,
+        elapsed: Math.round((Date.now() - state.startedAt) / 1000),
+        timers: state.timers.map(({ name, time }) => ({ name, time })),
+      };
+
       actions.reset();
-      state.onComplete();
+      state.onComplete(summary);
     },
   };
 
