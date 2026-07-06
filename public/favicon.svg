@@ -8,9 +8,9 @@
     .ink-s { stroke: var(--ink); }
     .acc-s { stroke: var(--accent); }
   </style>
-  <rect class="ink-f" x="27" y="2.5" width="10" height="6" rx="2.5"/>
-  <rect class="ink-f" x="29.5" y="7" width="5" height="8"/>
-  <rect class="ink-f" x="44.5" y="17.25" width="9" height="5.5" rx="2.75" transform="rotate(45 49 20)"/>
-  <circle class="ink-s" cx="32" cy="37" r="19.5" fill="none" stroke-width="7"/>
-  <path class="acc-s" d="M32 37 L40.5 28.5" fill="none" stroke-width="6.5" stroke-linecap="round"/>
+  <rect class="ink-f" x="27" y="2" width="10" height="5.5" rx="2.5"/>
+  <rect class="ink-f" x="30" y="7" width="4" height="6.5"/>
+  <rect class="ink-f" x="47.15" y="15.1" width="8.5" height="5" rx="2.5" transform="rotate(45 51.4 17.6)"/>
+  <circle class="ink-s" cx="32" cy="37" r="24" fill="none" stroke-width="6"/>
+  <path class="acc-s" d="M32 37 L42.5 26.5" fill="none" stroke-width="5.5" stroke-linecap="round"/>
 </svg>
