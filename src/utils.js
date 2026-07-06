@@ -24,8 +24,15 @@ export const normalizeWorkout = data => {
 
 export const loadWorkout = async () => {
   const params = new URLSearchParams(window.location.search);
-  const url = params.get('url');
-  const data = url ? await request(url) : getFromStorage('timers');
+  const url = params.get('url') || getFromStorage('workoutUrl');
+  const remote = url ? await request(url) : null;
+
+  if (url) {
+    setToStorage('workoutUrl', url);
+  }
+
+  const hasTimers = remote && (Array.isArray(remote) ? remote.length : remote.timers?.length);
+  const data = hasTimers ? remote : getFromStorage('timers');
 
   return normalizeWorkout(data);
 };

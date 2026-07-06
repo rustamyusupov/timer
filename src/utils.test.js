@@ -1,5 +1,52 @@
-import { describe, it, expect } from 'vitest';
-import { formatTime, normalizeWorkout } from './utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { formatTime, loadWorkout, normalizeWorkout } from './utils';
+
+describe('loadWorkout', () => {
+  const workout = { name: 'Yoga', sport: 'Yoga', timers: [{ id: 0, name: 'Cat-Cow', time: 90 }] };
+  let storage;
+
+  beforeEach(() => {
+    storage = {};
+    vi.stubGlobal('window', { location: { search: '' } });
+    vi.stubGlobal('localStorage', {
+      getItem: key => storage[key] ?? null,
+      setItem: (key, value) => {
+        storage[key] = value;
+      },
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it('fetches workout from the url param and remembers the url', async () => {
+    window.location.search = '?url=/workout.json';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => workout }));
+
+    await expect(loadWorkout()).resolves.toEqual(workout);
+    expect(storage.workoutUrl).toBe('"/workout.json"');
+  });
+
+  it('reuses the stored url when opened without params', async () => {
+    storage.workoutUrl = '"/workout.json"';
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => workout });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(loadWorkout()).resolves.toEqual(workout);
+    expect(fetchMock).toHaveBeenCalledWith('/workout.json');
+  });
+
+  it('falls back to the stored workout when the fetch fails', async () => {
+    storage.workoutUrl = '"/workout.json"';
+    storage.timers = JSON.stringify(workout);
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(loadWorkout()).resolves.toEqual(workout);
+  });
+});
 
 describe('normalizeWorkout', () => {
   it('wraps a plain timers array with default name and sport', () => {
